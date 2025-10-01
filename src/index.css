@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design system – all in HSL format */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 15% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 20%;
+
+    /* 🔵 Primary (replaced with #19284a → hsl(222, 48%, 20%)) */
+    --primary: 222 48% 20%;
+    --primary-foreground: 0 0% 100%;
+
+    /* lighter tints of primary */
+    --primary-light: 222 40% 30%;
+    --primary-lighter: 222 35% 45%;
+
+    --secondary: 220 20% 95%;
+    --secondary-foreground: 222 48% 20%;
+
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 45%;
+
+    /* 🟠 Accent (replaced with #ff4d4f → hsl(0, 100%, 64%)) */
+    --accent: 0 100% 64%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 20% 90%;
+    --input: 220 20% 90%;
+    --ring: 222 48% 20%;
+
+    --radius: 0.75rem;
+
+    /* Gradients updated to new primary/accent */
+    --gradient-primary: linear-gradient(
+      135deg,
+      hsl(222, 48%, 20%) 0%,
+      hsl(222, 40%, 28%) 100%
+    );
+    --gradient-accent: linear-gradient(
+      135deg,
+      hsl(0, 100%, 64%) 0%,
+      hsl(0, 85%, 70%) 100%
+    );
+    --gradient-subtle: linear-gradient(
+      180deg,
+      hsl(0, 0%, 100%) 0%,
+      hsl(220, 20%, 98%) 100%
+    );
+
+    --shadow-elegant: 0 10px 40px -10px hsl(222 48% 20% / 0.25);
+    --shadow-soft: 0 4px 20px -4px hsl(220 20% 50% / 0.15);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 220 25% 10%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 25% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    /* dark mode primary */
+    --primary: 222 40% 55%;
+    --primary-foreground: 220 25% 10%;
+
+    --secondary: 220 20% 20%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 10% 65%;
+
+    /* dark mode accent */
+    --accent: 0 85% 70%;
+    --accent-foreground: 220 25% 10%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 220 20% 25%;
+    --input: 220 20% 25%;
+    --ring: 222 40% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
