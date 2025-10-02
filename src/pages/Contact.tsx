@@ -1,29 +1,95 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
-import { toast } from 'sonner';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabaseClient";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: '',
-    message: '',
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
+    subject: "",
+    message: "",
+    hp: "", // honeypot
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast.success('Message envoyé avec succès ! Nous vous recontacterons rapidement.');
-    setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+  // Keep phone numeric-only, max 10 digits
+  const handlePhoneChange = (val: string) => {
+    const digits = val.replace(/\D/g, "").slice(0, 10);
+    setFormData((p) => ({ ...p, phone: digits }));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    if (name === "phone") return handlePhoneChange(value);
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Basic guards
+    if (!/^0\d{9}$/.test(formData.phone)) {
+      toast.error("Le numéro doit contenir 10 chiffres et commencer par 0 (ex: 0612345678).");
+      return;
+    }
+    if (!formData.name || !formData.email || !formData.city || !formData.message) {
+      toast.error("Merci de remplir tous les champs obligatoires.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // Merge subject into message so it’s stored/emailed as well
+    const messageWithSubject = formData.subject
+      ? `Sujet: ${formData.subject}\n\n${formData.message}`
+      : formData.message;
+
+    // Build payload expected by Edge Function
+    const payload = {
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      city: formData.city,
+      service: "contact", // tag this submission as a contact
+      message: messageWithSubject,
+      hp: formData.hp,
+    };
+
+    try {
+      const { data, error } = await supabase.functions.invoke("submit-quote", {
+        body: payload,
+        headers: { "x-page-path": window.location.pathname },
+      });
+
+      if (error) throw error;
+
+      if (data?.ok) {
+        toast.success("Message envoyé avec succès ! Nous vous recontacterons rapidement.");
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          city: "",
+          subject: "",
+          message: "",
+          hp: "",
+        });
+      } else {
+        toast.error("Réponse inattendue du serveur.");
+      }
+    } catch (err: any) {
+      toast.error(err?.message || "Échec de l’envoi. Réessayez dans un instant.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -32,9 +98,7 @@ const Contact = () => {
       <section className="bg-gradient-primary py-8 text-primary-foreground">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-              Contactez-nous
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Contactez-nous</h1>
             <p className="text-lg text-primary-foreground/90">
               Notre équipe est à votre disposition pour répondre à toutes vos questions
             </p>
@@ -59,7 +123,7 @@ const Contact = () => {
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-soft transition-shadow animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+            <Card className="text-center hover:shadow-soft transition-shadow animate-fade-in-up" style={{ animationDelay: "100ms" }}>
               <CardContent className="pt-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
                   <Mail className="h-8 w-8" />
@@ -72,7 +136,7 @@ const Contact = () => {
               </CardContent>
             </Card>
 
-            <Card className="text-center hover:shadow-soft transition-shadow animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+            <Card className="text-center hover:shadow-soft transition-shadow animate-fade-in-up" style={{ animationDelay: "200ms" }}>
               <CardContent className="pt-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
                   <MapPin className="h-8 w-8" />
@@ -97,6 +161,17 @@ const Contact = () => {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Honeypot anti-bot */}
+                  <input
+                    type="text"
+                    name="hp"
+                    value={formData.hp}
+                    onChange={handleChange}
+                    className="hidden"
+                    tabIndex={-1}
+                    autoComplete="off"
+                  />
+
                   <div>
                     <Label htmlFor="name">Nom complet *</Label>
                     <Input
@@ -128,10 +203,26 @@ const Contact = () => {
                       id="phone"
                       name="phone"
                       type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      placeholder="06 98 66 93 78"
+                      placeholder="06 12 34 56 78"
+                      autoComplete="tel"
+                    />
+                  </div>
+
+                  {/* New required City (DB/function needs it) */}
+                  <div>
+                    <Label htmlFor="city">Ville *</Label>
+                    <Input
+                      id="city"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      required
+                      placeholder="Votre ville"
                     />
                   </div>
 
@@ -159,8 +250,8 @@ const Contact = () => {
                     />
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full">
-                    Envoyer la demande
+                  <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? "Envoi en cours..." : "Envoyer la demande"}
                   </Button>
 
                   <p className="text-xs text-muted-foreground text-center">
@@ -189,9 +280,7 @@ const Contact = () => {
                     <span className="font-semibold">9h00 - 17h00</span>
                   </div>
                   <div className="pt-4 mt-4 border-t">
-                    <p className="text-sm text-accent font-semibold">
-                      Service d'urgence 24h/24 - 7j/7 disponible
-                    </p>
+                    <p className="text-sm text-accent font-semibold">Service d'urgence 24h/24 - 7j/7 disponible</p>
                   </div>
                 </CardContent>
               </Card>

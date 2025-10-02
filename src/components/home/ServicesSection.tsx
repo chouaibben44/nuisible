@@ -26,7 +26,7 @@ const services = [
     highlights: ['Intervention rapide', 'Procédé certifié', 'Suivi post-traitement'],
   },
   {
-    icon: Home,
+    icon: ShieldCheck,
     title: 'Traitement des termites',
     description:
       'Détection, barrières et curatif certifiés. Traçabilité complète pour préserver la valeur de vos structures.',

@@ -1,45 +1,110 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { useToast } from '@/hooks/use-toast';
-import { Phone, Mail, MapPin, Clock, CheckCircle } from 'lucide-react';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
+
+// ----- Validation (Zod) -----
 const formSchema = z.object({
   name: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
-  phone: z.string().min(10, { message: "Veuillez entrer un numéro de téléphone valide" }),
+  // French mobile/landline: 10 digits starting with 0 (e.g., 0612345678)
+  phone: z
+    .string()
+    .regex(/^0\d{9}$/, { message: "Téléphone au format 10 chiffres, commençant par 0 (ex: 0612345678)" }),
   email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
+  city: z.string().min(2, { message: "La ville doit contenir au moins 2 caractères" }),
   nuisibleType: z.string().min(1, { message: "Veuillez sélectionner un type de nuisible" }),
   message: z.string().min(10, { message: "Le message doit contenir au moins 10 caractères" }),
+  hp: z.string().optional(), // honeypot
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 const Devis = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      phone: '',
-      email: '',
-      nuisibleType: '',
-      message: '',
+      name: "",
+      phone: "",
+      email: "",
+      city: "",
+      nuisibleType: "",
+      message: "",
+      hp: "",
     },
+    mode: "onTouched",
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    setIsSubmitted(true);
-    toast({
-      title: "Demande envoyée !",
-      description: "Nous vous contacterons dans les plus brefs délais.",
-    });
+  // Keep phone input numeric-only & max 10 while typing
+  const handlePhoneChange = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+    form.setValue("phone", digits, { shouldValidate: true });
+  };
+
+  const onSubmit = async (values: FormValues) => {
+    // Build payload expected by the Edge Function
+    const payload = {
+      name: values.name,
+      phone: values.phone, // already numeric-only and validated
+      email: values.email,
+      city: values.city,
+      service: values.nuisibleType, // map -> "service" for the function/DB
+      message: values.message,
+      hp: values.hp || "",
+    };
+
+    try {
+      const { data, error } = await supabase.functions.invoke("submit-quote", {
+        body: payload,
+        headers: { "x-page-path": window.location.pathname },
+      });
+
+      if (error) throw error;
+
+      if (data?.ok) {
+        setIsSubmitted(true);
+        toast({
+          title: "Demande envoyée !",
+          description: "Nous vous contacterons dans les plus brefs délais.",
+        });
+      } else {
+        toast({
+          title: "Erreur",
+          description: "Réponse inattendue du serveur.",
+          variant: "destructive",
+        });
+      }
+    } catch (err: any) {
+      toast({
+        title: "Échec de l’envoi",
+        description: err?.message || "Veuillez réessayer dans un instant.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (isSubmitted) {
@@ -63,9 +128,7 @@ const Devis = () => {
               </a>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="/">
-                Retour à l'accueil
-              </a>
+              <a href="/">Retour à l'accueil</a>
             </Button>
           </div>
         </div>
@@ -75,7 +138,7 @@ const Devis = () => {
 
   return (
     <div className="min-h-screen bg-secondary/30">
-      {/* Hero Section (tighter on mobile) */}
+      {/* Hero Section */}
       <section className="bg-gradient-primary text-primary-foreground py-6 sm:py-10">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-heading font-bold mb-3 sm:mb-6 leading-tight">
@@ -96,8 +159,12 @@ const Devis = () => {
               <h2 className="text-xl sm:text-2xl font-heading font-bold mb-5 sm:mb-6 text-primary">
                 Remplissez le formulaire
               </h2>
+
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  {/* Honeypot (hidden) */}
+                  <input type="text" {...form.register("hp")} className="hidden" tabIndex={-1} autoComplete="off" />
+
                   <FormField
                     control={form.control}
                     name="name"
@@ -119,7 +186,14 @@ const Devis = () => {
                       <FormItem>
                         <FormLabel>Téléphone *</FormLabel>
                         <FormControl>
-                          <Input placeholder="06 12 34 56 78" {...field} />
+                          <Input
+                            placeholder="06 12 34 56 78"
+                            inputMode="numeric"
+                            maxLength={10}
+                            value={field.value}
+                            onChange={(e) => handlePhoneChange(e.target.value)}
+                            autoComplete="tel"
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -134,6 +208,21 @@ const Devis = () => {
                         <FormLabel>Email *</FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="votre@email.fr" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* City (required by your DB/function) */}
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Ville *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Votre ville" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

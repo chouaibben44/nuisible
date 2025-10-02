@@ -15,6 +15,7 @@ import Devis from "./pages/Devis";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./ScrollToTop";
+import { FloatingCallButton } from "@/components/FloatingCallButton";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <FloatingCallButton />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

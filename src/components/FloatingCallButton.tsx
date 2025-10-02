@@ -1,20 +1,34 @@
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import React from "react";
 
-export const FloatingCallButton = () => {
+export const FloatingCallButton: React.FC = () => {
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <Button
-        variant="orange"
-        size="lg"
-        className="h-16 w-16 rounded-full py-2 shadow-float hover:scale-110 transition-transform md:h-auto md:w-auto md:rounded-full md:px-6"
-        asChild
+    <>
+      {/* Mobile: full-width sticky bottom bar */}
+      <div
+        className="fixed  inset-x-0 bottom-0 z-50 md:hidden"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }} // iOS safe area
       >
-        <a href="tel:+33123456789" aria-label="Appeler maintenant">
-          <Phone className="h-6 w-6" />
-          <span className="ml-2 hidden md:inline">Appel d'urgence</span>
-        </a>
-      </Button>
-    </div>
+        <Button
+  variant="default"
+  size="lg"
+  className="
+    w-full h-14 rounded-none shadow-lg text-white border-0
+    bg-[linear-gradient(to_right,#8BC34A,#4CAF50)]
+    hover:opacity-90 active:opacity-95
+    focus-visible:ring-white
+  "
+  asChild
+>
+  <a href="tel:+33698669378" aria-label="Appeler maintenant">
+    <Phone className="h-5 w-5" />
+    <span className="ml-2">Appeler immédiatement un expert</span>
+  </a>
+</Button>
+
+
+      </div>
+    </>
   );
 };

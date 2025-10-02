@@ -59,7 +59,7 @@ const ITEMS: Item[] = [
       'Traçabilité complète',
     ],
     image: termiteImage,
-    icon: Home,
+    icon: ShieldCheck,
     link: '/services/desinsectisation-termites', // <-- set your route here
   },
 ];

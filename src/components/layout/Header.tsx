@@ -234,7 +234,7 @@ const Header = () => {
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <div className="md:hidden pb-6 animate-fade-in">
+          <div className="md:hidden pb-6 pt-6 animate-fade-in">
             <nav className="flex flex-col space-y-4">
               <Link
                 to="/"
