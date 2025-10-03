@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
+import { Helmet } from "react-helmet-async";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -93,6 +94,16 @@ const Contact = () => {
   };
 
   return (
+    <>
+
+    <Helmet>
+        <title>Contact – Parlez à un expert | Éradication Nuisibles</title>
+        <meta
+          name="description"
+          content="Des questions sur nos services de dépigeonnage ou désinsectisation ? Contactez-nous : formulaire, email ou téléphone. Réponse sous 24 h."
+        />
+      </Helmet>
+
     <div className="min-h-screen">
       {/* Hero section */}
       <section className="bg-gradient-primary py-8 text-primary-foreground">
@@ -312,6 +323,7 @@ const Contact = () => {
         </div>
       </section>
     </div>
+     </>
   );
 };
 

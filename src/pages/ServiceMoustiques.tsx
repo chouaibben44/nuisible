@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, CheckCircle, Shield, Clock, Award, FileText } from "lucide-react";
 import serviceImage from "@/assets/service-mosquitoes.jpg";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const moustiquesFAQ = [
   {
@@ -32,10 +33,20 @@ const moustiquesFAQ = [
 const ServiceMoustiques = () => {
   return (
     <>
+    
+        <Helmet>
+            <title>Traitement anti-moustiques – Désinsectisation efficace</title>
+            <meta
+              name="description"
+              content="Lutte anti-moustiques pour maisons & locaux : diagnostics, traitements ciblés, conseils préventifs. Résultats rapides. Devis gratuit."
+            />
+          </Helmet>
+
+
       <FloatingCallButton />
 
       {/* Hero Section */}
-      <section className="relative h-[30vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[35vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${serviceImage})` }}

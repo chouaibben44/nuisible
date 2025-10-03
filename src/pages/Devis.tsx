@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-
+import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -137,6 +137,18 @@ const Devis = () => {
   }
 
   return (
+
+    <>
+    
+        <Helmet>
+            <title>Demande de devis gratuit – Intervention sous 24h</title>
+            <meta
+              name="description"
+              content="Estimez votre traitement : dépigeonnage, moustiques, termites. Réponse rapide, conseils d’experts, prix transparents. Demande 100% gratuite."
+            />
+          </Helmet>
+
+
     <div className="min-h-screen bg-secondary/30">
       {/* Hero Section */}
       <section className="bg-gradient-primary text-primary-foreground py-6 sm:py-10">
@@ -356,6 +368,7 @@ const Devis = () => {
         </div>
       </section>
     </div>
+    </>
   );
 };
 

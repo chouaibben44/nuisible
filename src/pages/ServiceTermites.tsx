@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, CheckCircle, AlertTriangle, Shield, Clock, Award, FileText } from "lucide-react";
 import serviceTermites from "@/assets/service-termites.jpg";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const termitesFAQ = [
   {
@@ -32,6 +33,16 @@ const termitesFAQ = [
 const ServiceTermites = () => {
   return (
     <>
+
+    <Helmet>
+                    <title>Traitement termites – Protection & élimination durable</title>
+                    <meta
+                      name="description"
+                      content="Détection, pièges et barrières anti-termites. Méthodes certifiées et respectueuses. Protégez votre bien dès maintenant. Devis gratuit."
+                    />
+                  </Helmet>
+
+
       <FloatingCallButton />
 
       {/* HERO (same style as moustiques) */}

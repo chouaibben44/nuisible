@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Phone, CheckCircle, Shield, Clock, Award, FileText } from "lucide-react";
 import servicePigeons from "@/assets/service-pigeons.jpg";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const pigeonsFAQ = [
   {
@@ -32,6 +33,16 @@ const pigeonsFAQ = [
 const ServicePigeons = () => {
   return (
     <>
+        
+            <Helmet>
+                <title>Dépigeonnage professionnel – Filets, pics & répulsifs</title>
+                <meta
+                  name="description"
+                  content="Dépigeonnage et solutions durable contre les pigeons : pose de pics, filets, solutions anti-salissures. Techniciens certifiés, intervention rapide. Devis gratuit."
+                />
+              </Helmet>
+
+
       <FloatingCallButton />
 
       {/* HERO (même style que moustiques) */}

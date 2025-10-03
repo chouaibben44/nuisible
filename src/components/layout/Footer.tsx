@@ -10,7 +10,7 @@ const Footer = () => {
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
         {/* Top: Certifications strip (always in a single row) */}
-<div className="mb-10">
+<div className="mb-20">
   <div className="grid grid-flow-col auto-cols-max items-center justify-around md:justify-center gap-4 md:gap-8">
     <div className="h-8 md:h-12 flex items-center">
       <img
@@ -173,13 +173,13 @@ const Footer = () => {
             <div className="flex gap-4">
               <Link
                 to="#"
-                className="text-sm text-primary-foreground/70 hover:text-accent transition-colors"
+                className="text-sm pb-12 text-primary-foreground/70 hover:text-accent transition-colors"
               >
                 Mentions légales
               </Link>
               <Link
                 to="#"
-                className="text-sm text-primary-foreground/70 hover:text-accent transition-colors"
+                className="text-sm pb-12 text-primary-foreground/70 hover:text-accent transition-colors"
               >
                 Politique de confidentialité
               </Link>

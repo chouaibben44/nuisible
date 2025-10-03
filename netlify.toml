@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build:static"   # builds + prerenders
+  publish = "dist"                   # serve the dist folder
+
+# Optional: cache policy (aggressive caching for assets, safe for HTML)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    cache-control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    cache-control = "public, max-age=0, must-revalidate"
