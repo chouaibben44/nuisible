@@ -1,4 +1,4 @@
-import  FloatingCallButtonPortal from "@/components/FloatingCallButtonPortal";
+import { FloatingCallButton } from "@/components/FloatingCallButton";
 import { QuoteForm } from "@/components/QuoteForm";
 import { FAQSection } from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ const ServiceMoustiques = () => {
           </Helmet>
 
 
-      <FloatingCallButtonPortal />
+      <FloatingCallButton />
 
       {/* Hero Section */}
       <section className="relative h-[35vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
