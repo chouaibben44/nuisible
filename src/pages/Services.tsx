@@ -26,6 +26,7 @@ const services = [
       'Conformité aux normes de bien-être animal',
       'Maintenance et garantie incluses',
     ],
+    slug: "/depigeonnage"
   },
   {
     id: 'moustiques',
@@ -46,6 +47,7 @@ const services = [
       'Respect de la biodiversité',
       'Traitement adapté à votre environnement',
     ],
+    slug: "/desinsectisation-moustiques"
   },
   {
     id: 'termites',
@@ -66,6 +68,7 @@ const services = [
       'Diagnostic gratuit et complet',
       'Suivi régulier post-traitement',
     ],
+     slug: "/desinsectisation-termites"
   },
 ];
 
@@ -155,7 +158,7 @@ const Services = () => {
                           </div>
 
                           <Button size="lg" asChild className="mt-4">
-                            <Link to="/contact">Demander un devis gratuit</Link>
+                            <Link to={`/services${service.slug}`}>Demander un devis gratuit</Link>
                           </Button>
                         </CardContent>
                       </div>
@@ -179,10 +182,10 @@ const Services = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild>
-              <Link to="/contact">Demander un devis</Link>
+              <Link to="/devis">Demander un devis</Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <a href="tel:+33123456789">Appeler maintenant</a>
+              <a href="tel:+33698669378">Appeler maintenant</a>
             </Button>
           </div>
         </div>

@@ -188,7 +188,7 @@ const Header = () => {
                       asChild
                       className="flex items-center bg-accent gap-2"
                     >
-                      <a href="tel:0698669378">
+                      <a href="tel:+33698669378">
                         <PhoneCall className="w-4 h-4" />
                         06 98 66 93 78
                       </a>
@@ -305,7 +305,7 @@ const Header = () => {
               </Link>
 
               <Button asChild className="w-full">
-                <Link to="/contact" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/devis" onClick={() => setIsMenuOpen(false)}>
                   Demander un devis
                 </Link>
               </Button>

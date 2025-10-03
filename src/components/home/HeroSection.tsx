@@ -49,7 +49,7 @@ const HeroSection = () => {
               className="text-lg border border-transparent text-primary bg-white flex items-center justify-center gap-2
                          hover:bg-white/30 hover:backdrop-blur-sm hover:border hover:border-white/50"
             >
-              <a href="tel:0698669378">
+              <a href="tel:+33698669378">
                 <PhoneCall className="w-7 h-7 fill-current" stroke="none" />
                 06 98 66 93 78
               </a>

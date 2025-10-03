@@ -141,10 +141,10 @@ const Footer = () => {
                 <div>
                   <p className="text-sm text-primary-foreground/80">Appelez-nous</p>
                   <a
-                    href="tel:+33123456789"
+                    href="tel:+33698669378"
                     className="text-sm font-medium hover:text-accent transition-colors"
                   >
-                    01 23 45 67 89
+                    06 98 66 93 78
                   </a>
                 </div>
               </li>

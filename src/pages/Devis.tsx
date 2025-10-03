@@ -22,7 +22,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, CheckCircle, Palette } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 
 // ----- Validation (Zod) -----
@@ -40,6 +40,8 @@ const formSchema = z.object({
 });
 
 type FormValues = z.infer<typeof formSchema>;
+
+const anon = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 const Devis = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -76,11 +78,12 @@ const Devis = () => {
       message: values.message,
       hp: values.hp || "",
     };
-
+    
     try {
       const { data, error } = await supabase.functions.invoke("submit-quote", {
         body: payload,
-        headers: { "x-page-path": window.location.pathname },
+        method: "POST",
+        headers: { "x-page-path": window.location.pathname }
       });
 
       if (error) throw error;
@@ -122,7 +125,7 @@ const Devis = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="default" asChild>
-              <a href="tel:+33123456789">
+              <a href="tel:+33698669378">
                 <Phone className="mr-2 h-5 w-5" />
                 Appeler maintenant
               </a>
@@ -333,11 +336,11 @@ const Devis = () => {
                   Besoin d'une réponse immédiate ?
                 </h3>
                 <div className="space-y-4">
-                  <a href="tel:+33123456789" className="flex items-center gap-3 hover:text-accent transition-colors">
+                  <a href="tel:+33698669378" className="flex items-center gap-3 hover:text-accent transition-colors">
                     <Phone className="h-5 w-5" />
                     <div>
                       <div className="text-sm opacity-80">Appelez-nous</div>
-                      <div className="font-semibold">01 23 45 67 89</div>
+                      <div className="font-semibold">06 98 66 93 78</div>
                     </div>
                   </a>
                   <a href="mailto:contact@expert-nuisibles.fr" className="flex items-center gap-3 hover:text-accent transition-colors">

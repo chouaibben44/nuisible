@@ -43,7 +43,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 </Link>
               ))}
               <Button variant="urgent" size="sm" asChild>
-                <a href="tel:+33123456789">
+                <a href="tel:+33698669378">
                   <Phone className="mr-2 h-4 w-4" />
                   Appeler
                 </a>
@@ -76,7 +76,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   </Link>
                 ))}
                 <Button variant="urgent" size="sm" asChild className="w-full">
-                  <a href="tel:+33123456789">
+                  <a href="tel:+33698669378">
                     <Phone className="mr-2 h-4 w-4" />
                     Appeler maintenant
                   </a>
@@ -123,7 +123,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
             <div>
               <h4 className="mb-4 font-semibold">Contact</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>Tél : 01 23 45 67 89</li>
+                <li>Tél : 06 98 66 93 78</li>
                 <li>Email : contact@expertnuisibles.fr</li>
                 <li>Du lundi au samedi</li>
                 <li>7h - 20h</li>

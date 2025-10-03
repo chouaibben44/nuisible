@@ -10,7 +10,8 @@ import {
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
-import { supabase } from "@/lib/supabaseClient";
+// We won’t use supabase.functions.invoke; just envs for the fetch URL/headers
+// Make sure these are defined in your .env: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
 
 interface QuoteFormProps {
   defaultService?: "pigeons" | "moustiques" | "termites";
@@ -64,11 +65,33 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke("submit-quote", {
-        body: payload,
-        headers: { "x-page-path": window.location.pathname },
+      const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/submit-quote`;
+      const anon = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": anon,
+          "Authorization": `Bearer ${anon}`,
+          "x-page-path": window.location.pathname,
+        },
+        body: JSON.stringify(payload),
       });
-      if (error) throw error;
+
+      // Read body as text first so we can always display the exact error from the server
+      const text = await res.text();
+
+      if (!res.ok) {
+        // Show status + exact server message
+        console.error("submit-quote failed:", res.status, text);
+        toast.error(`HTTP ${res.status}: ${text || "Edge Function error"}`);
+        return;
+      }
+
+      // If ok, parse JSON from the text
+      let data: any = null;
+      try { data = text ? JSON.parse(text) : null; } catch { /* ignore */ }
 
       if (data?.ok) {
         toast.success("Demande de devis envoyée avec succès. Nous vous recontactons rapidement.");
@@ -76,9 +99,11 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
         setService(defaultService);
         setPhone("");
       } else {
+        console.warn("Unexpected response:", text);
         toast.error("Réponse inattendue du serveur.");
       }
     } catch (err: any) {
+      console.error("Network/JS error calling submit-quote:", err);
       toast.error(err?.message || "Échec de l’envoi. Réessaie dans un instant.");
     } finally {
       setIsSubmitting(false);
@@ -115,7 +140,6 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
                 placeholder="06 12 34 56 78"
                 value={phone}
                 onChange={handlePhoneChange}
-                // optional: prevent wheel/scroll changes on some browsers
                 onWheel={(e) => (e.currentTarget as HTMLInputElement).blur()}
                 autoComplete="tel"
               />
@@ -158,7 +182,12 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
 
           <div className="space-y-2">
             <Label htmlFor="message">Décrivez votre situation</Label>
-            <Textarea id="message" name="message" placeholder="Décrivez-nous votre problème de nuisibles..." rows={4} />
+            <Textarea
+              id="message"
+              name="message"
+              placeholder="Décrivez-nous votre problème de nuisibles..."
+              rows={4}
+            />
           </div>
 
           <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
