@@ -5,12 +5,6 @@ import React from "react";
 export const FloatingCallButton: React.FC = () => {
   return (
     <>
-      {/* Spacer so content isn't hidden behind the bar */}
-      <div
-        className="md:hidden"
-        style={{ height: `calc(56px + var(--safe-bottom))` }} // 56px = h-14
-        aria-hidden
-      />
 
       {/* Fixed full-bleed bottom bar */}
       <div
