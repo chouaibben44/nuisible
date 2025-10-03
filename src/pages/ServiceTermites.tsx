@@ -1,4 +1,4 @@
-import { FloatingCallButton } from "@/components/FloatingCallButton";
+import FloatingCallButtonPortal from "@/components/FloatingCallButtonPortal";
 import { QuoteForm } from "@/components/QuoteForm";
 import { FAQSection } from "@/components/FAQSection";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ const ServiceTermites = () => {
                   </Helmet>
 
 
-      <FloatingCallButton />
+      <FloatingCallButtonPortal />
 
       {/* HERO (same style as moustiques) */}
       <section className="relative h-[30vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
