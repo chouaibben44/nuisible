@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build:static"   # builds + prerenders
+  command = "npx puppeteer browsers install chrome && npm run build && npm run prerender"   # builds + prerenders
   publish = "dist"                   # serve the dist folder
 
 # Optional: cache policy (aggressive caching for assets, safe for HTML)

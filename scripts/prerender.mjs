@@ -64,7 +64,10 @@ async function saveHtml(route, html) {
 async function prerender() {
   await ensureDistExists();
   const server = await startServer();
-  const browser = await puppeteer.launch(); // headless by default
+  const browser = await puppeteer.launch({
+  headless: "new",
+  args: ["--no-sandbox", "--disable-setuid-sandbox"],
+});
 
   try {
     for (const route of ROUTES) {
