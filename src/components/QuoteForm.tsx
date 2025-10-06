@@ -10,8 +10,7 @@ import {
 import {
   Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
-// We won’t use supabase.functions.invoke; just envs for the fetch URL/headers
-// Make sure these are defined in your .env: VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY
+import { useNavigate } from "react-router-dom"; // ← add this
 
 interface QuoteFormProps {
   defaultService?: "pigeons" | "moustiques" | "termites";
@@ -23,6 +22,7 @@ const pretty = (v?: string) =>
   v === "termites" ? "Termites" : v ?? "";
 
 export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
+  const navigate = useNavigate(); // ← add this
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [service, setService] = useState<string | undefined>(defaultService);
   const [phone, setPhone] = useState(""); // numeric-only controlled input
@@ -42,7 +42,7 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
 
     const payload = {
       name: (fd.get("name") as string) || "",
-      phone, // already numeric-only
+      phone,
       email: (fd.get("email") as string) || "",
       city: (fd.get("city") as string) || "",
       service: (fd.get("service") as string) || "",
@@ -50,7 +50,7 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
       hp: (fd.get("hp") as string) || "",
     };
 
-    // Front-end validation: FR number = 10 digits starting with 0
+    // Front end validation: FR number = 10 digits starting with 0
     if (!/^0\d{9}$/.test(payload.phone)) {
       toast.error("Le numéro doit contenir 10 chiffres et commencer par 0 (ex: 0612345678).");
       setIsSubmitting(false);
@@ -79,25 +79,20 @@ export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
         body: JSON.stringify(payload),
       });
 
-      // Read body as text first so we can always display the exact error from the server
       const text = await res.text();
 
       if (!res.ok) {
-        // Show status + exact server message
         console.error("submit-quote failed:", res.status, text);
         toast.error(`HTTP ${res.status}: ${text || "Edge Function error"}`);
         return;
       }
 
-      // If ok, parse JSON from the text
       let data: any = null;
       try { data = text ? JSON.parse(text) : null; } catch { /* ignore */ }
 
       if (data?.ok) {
-        toast.success("Demande de devis envoyée avec succès. Nous vous recontactons rapidement.");
-        formEl.reset();
-        setService(defaultService);
-        setPhone("");
+        // same behavior as your Devis page
+        navigate("/confirmation", { replace: true });
       } else {
         console.warn("Unexpected response:", text);
         toast.error("Réponse inattendue du serveur.");

@@ -16,6 +16,7 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./ScrollToTop";
 import { FloatingCallButton } from "@/components/FloatingCallButton";
+import Confirmation from "@/pages/Confirmation";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/services/desinsectisation-termites" element={<><Header /><ServiceTermites /><Footer /></>} />
           <Route path="/devis" element={<Devis />} />
           <Route path="/a-propos" element={<><Header /><About /><Footer /></>} />
+          <Route path="/confirmation" element={<><Confirmation /></>} />
           <Route path="/contact" element={<><Header /><Contact /><Footer /></>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
