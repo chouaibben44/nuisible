@@ -578,33 +578,33 @@ useEffect(() => {
                       <Bug className="h-4 w-4" /> Xylophage
                     </Link>
                     <Link
-                      to="/services/poudrage-toiture-express"
-                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <span
-                        className="md:hidden inline-block h-4 w-4 bg-muted-foreground"
-                        style={{
-                          WebkitMaskImage: `url(${waspIcon})`,
-                          maskImage: `url(${waspIcon})`,
-                          WebkitMaskRepeat: "no-repeat",
-                          maskRepeat: "no-repeat",
-                          WebkitMaskSize: "contain",
-                          maskSize: "contain",
-                          WebkitMaskPosition: "center",
-                          maskPosition: "center",
-                        }}
-                        aria-hidden
-                      />
-                      {/* desktop = original SVG color */}
-                      <img
-                        src={waspIcon}
-                        alt=""
-                        className="hidden md:block h-4 w-4"
-                        loading="lazy"
-                      />{" "}
-                      Poudrage toiture exprèss
-                    </Link>
+  to="/services/poudrage-toiture-express"
+  className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+  onClick={() => setIsMenuOpen(false)}
+>
+  <span
+    className="md:hidden inline-block h-4 w-4 align-middle"
+    style={{
+      // Safari-friendly shorthand: image + position / size + repeat
+      WebkitMask: `url(${waspIcon}) center / contain no-repeat`,
+      mask: `url(${waspIcon}) center / contain no-repeat`,
+      // color source for the masked shape
+      backgroundColor: "currentColor",
+      // ensure it behaves as a proper box
+      display: "inline-block",
+    }}
+    aria-hidden
+  />
+  {/* desktop = original SVG color */}
+  <img
+    src={waspIcon}
+    alt=""
+    className="hidden md:block h-4 w-4"
+    loading="lazy"
+  />{" "}
+  Poudrage toiture exprèss
+</Link>
+
                   </div>
                 )}
               </div>
