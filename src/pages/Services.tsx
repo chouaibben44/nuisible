@@ -17,7 +17,44 @@ import serviceChenille from "@/assets/chenilles processionnaires.webp";
 
 // Custom SVG icons (no SVGR)
 import moleSvg from "@/assets/mole.svg";
-import waspSvg from "@/assets/wasp.svg";
+import waspSvgRaw from "@/assets/wasp.svg?raw";
+
+
+/** Build an inline <svg> that fills with currentColor and removes any background rect/fixed colors. */
+const makeInlineFillIconFromRaw =
+  (raw: string) =>
+  ({ className = "" }: { className?: string }) => {
+    const viewBox = raw.match(/viewBox="([^"]+)"/i)?.[1] ?? "0 0 24 24";
+
+    // strip outer <svg> … </svg>
+    let inner = raw.replace(/^[\s\S]*?<svg[^>]*>/i, "").replace(/<\/svg>\s*$/i, "");
+
+    // drop obvious background rectangles (common in exported icons)
+    inner = inner.replace(
+      /<rect\b[^>]*?(?:fill|style)="[^"]*"(?:[^>]*?)\/?>/gi,
+      ""
+    );
+
+    // remove hard-coded fill/stroke so root props control the color
+    inner = inner
+      .replace(/\sfill\s*=\s*("[^"]*"|'[^']*')/gi, "")
+      .replace(/\sstroke\s*=\s*("[^"]*"|'[^']*')/gi, "")
+      .replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/gi, "");
+
+    return (
+      <svg
+        aria-hidden
+        viewBox={viewBox}
+        width="24"
+        height="24"
+        className={`inline-block align-middle ${className}`}
+        fill="currentColor"   // ⬅️ inherits text color (white in your case)
+        stroke="none"
+        focusable="false"
+        dangerouslySetInnerHTML={{ __html: inner }}
+      />
+    );
+  };
 
 /** Lightweight “mask icon” to paint a raw SVG in white (stroke/shape) with no background. */
 const makeMaskIcon =
@@ -43,7 +80,7 @@ const asIcon =
 
 // Build masked custom icons
 const MoleIcon: IconLike = makeMaskIcon(moleSvg);
-const WaspIcon: IconLike = makeMaskIcon(waspSvg);
+const WaspIcon: IconLike = makeInlineFillIconFromRaw(waspSvgRaw);
 
 type Service = {
   id: string;
