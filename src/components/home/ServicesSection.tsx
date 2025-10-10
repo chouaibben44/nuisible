@@ -13,29 +13,48 @@ import {
   Droplets,
   Zap,
 } from "lucide-react";
+import * as React from "react";
+import moleRaw from "@/assets/mole.svg?raw";
+import waspRaw from "@/assets/wasp.svg?raw";
 
-// Custom SVG files (no SVGR)
-import moleUrl from "@/assets/mole.svg";
-import waspUrl from "@/assets/wasp.svg";
+/** Parse <svg …viewBox="…">…</svg> into {viewBox, inner} and strip inline fill/stroke/colors */
+function parseSvg(raw: string) {
+  const viewBox = (raw.match(/viewBox="([^"]+)"/i) || [])[1] || "0 0 24 24";
+  // strip outer <svg> wrapper
+  let inner = raw.replace(/^[\s\S]*?<svg[^>]*>/i, "").replace(/<\/svg>\s*$/i, "");
 
-// Masked icon that uses background color as the icon color (transparent background)
-const MaskIcon = ({ src, className = "" }: { src: string; className?: string }) => (
-  <span
-    aria-hidden
-    className={`inline-block ${className}`}
-    style={{
-      WebkitMask: `url(${src}) no-repeat center / contain`,
-      mask: `url(${src}) no-repeat center / contain`,
-      // If no Tailwind size classes are provided, default to 20px
-      width: /(^|\s)w-/.test(className) ? undefined : "1.25rem",
-      height: /(^|\s)h-/.test(className) ? undefined : "1.25rem",
-    }}
-  />
-);
+  // Remove any inline color/style so root props control appearance
+  inner = inner
+    .replace(/\sfill\s*=\s*("[^"]*"|'[^']*')/gi, "")
+    .replace(/\sstroke\s*=\s*("[^"]*"|'[^']*')/gi, "")
+    .replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/gi, "");
 
-// Our two masked icons (white when given bg-primary-foreground)
-const MoleMaskedIcon = (p: { className?: string }) => <MaskIcon src={moleUrl} {...p} />;
-const WaspMaskedIcon = (p: { className?: string }) => <MaskIcon src={waspUrl} {...p} />;
+  return { viewBox, inner };
+}
+
+/** Inline fill icon: 24x24 box, fill = currentColor (so `text-*` controls color) */
+const makeLucideFillIcon =
+  (raw: string) =>
+  ({ className = "" }: { className?: string }) => {
+    const { viewBox, inner } = React.useMemo(() => parseSvg(raw), [raw]);
+    return (
+      <svg
+        aria-hidden
+        viewBox={viewBox}
+        width="24"
+        height="24"
+        className={`inline-block align-middle ${className}`}
+        fill="currentColor"
+        stroke="none"
+        focusable="false"
+        dangerouslySetInnerHTML={{ __html: inner }}
+      />
+    );
+  };
+
+// Only these two are custom-filled (white via text-primary-foreground)
+const MoleFilledIcon = makeLucideFillIcon(moleRaw);
+const WaspFilledIcon = makeLucideFillIcon(waspRaw);
 
 // Existing images
 import pigeonImage from "@/assets/service-pigeons.jpg";
@@ -51,7 +70,7 @@ import serviceChenille from "@/assets/chenilles processionnaires.webp";
 
 type Service = {
   icon: React.ElementType<{ className?: string }>;
-  /** Extra classes just for the icon (used by masked icons to set color) */
+  /** Extra classes just for the icon (kept for compatibility) */
   iconClass?: string;
   title: string;
   description: string;
@@ -100,8 +119,7 @@ const services: Service[] = [
     highlights: ["Sécurisation du site", "Intervention rapide", "Anti-réinfestation"],
   },
   {
-    icon: MoleMaskedIcon,
-    iconClass: "bg-primary-foreground", // color for masked icon (white)
+    icon: MoleFilledIcon, // will fill with currentColor (white via text-primary-foreground)
     title: "Taupe",
     description:
       "Repérage des galeries et piégeage professionnel avec suivi, pour pelouses et espaces verts préservés.",
@@ -128,8 +146,7 @@ const services: Service[] = [
     highlights: ["Diagnostic précis", "Traitement certifié", "Suivi et conseils"],
   },
   {
-    icon: WaspMaskedIcon,
-    iconClass: "bg-primary-foreground", // color for masked icon (white)
+    icon: WaspFilledIcon, // will fill with currentColor (white via text-primary-foreground)
     title: "Poudrage toiture express (guêpes)",
     description:
       "Neutralisation rapide des nids en hauteur par poudrage, sans démontage de toiture.",
@@ -278,7 +295,7 @@ const ServicesSection = () => {
                               <div className="absolute bottom-4 left-4 right-4">
                                 <div className="flex items-center gap-3">
                                   <div className="rounded-lg border border-white/30 bg-white/10 backdrop-blur p-2">
-                                    {/* Lucide icons use text-*, masked icons use bg-* via service.iconClass */}
+                                    {/* Icons use text-* color; custom ones fill with currentColor */}
                                     <Icon
                                       className={`h-5 w-5 text-primary-foreground ${service.iconClass ?? ""}`}
                                       aria-hidden

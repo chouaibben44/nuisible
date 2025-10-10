@@ -319,12 +319,23 @@ const Services = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
+            {/* CTA Section */}
       <section className="py-16 bg-muted">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-heading font-bold mb-4">
             Besoin d'une intervention rapide ?
           </h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Notre équipe est disponible 24h/24 et 7j/7 pour répondre à vos urgences
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" asChild>
+              <Link to="/devis">Demander un devis</Link>
+            </Button>
+            <Button size="lg" variant="outline" asChild>
+              <a href="tel:+33698669378">Appeler maintenant</a>
+            </Button>
+          </div>
         </div>
       </section>
     </div>
