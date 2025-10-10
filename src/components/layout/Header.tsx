@@ -56,6 +56,14 @@ const Header = () => {
     };
   }, [isServicesOpenDesktop]);
 
+  // Close any open menus on route change
+useEffect(() => {
+  setIsMenuOpen(false);
+  setIsServicesOpenDesktop(false);
+  setIsServicesOpenMobile(false);
+}, [location.pathname, location.search, location.hash]);
+
+
   const isActive = (path: string) => location.pathname === path;
 
   const openServices = () => {
