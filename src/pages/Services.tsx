@@ -142,7 +142,7 @@ const services: Service[] = [
   },
   {
     id: 'termites',
-    icon: asIcon(HomeIcon),
+    icon: asIcon(Bug),
     title: 'Traitement des termites',
     subtitle: 'Protection des structures et bâtiments',
     description:
