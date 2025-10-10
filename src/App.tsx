@@ -17,6 +17,11 @@ import Footer from "./components/layout/Footer";
 import ScrollToTop from "./ScrollToTop";
 import { FloatingCallButton } from "@/components/FloatingCallButton";
 import Confirmation from "@/pages/Confirmation";
+import ChenilleProcessionnaire from "@/pages/chenille-processionnaire";
+import Taupe from "@/pages/taupe";
+import Demoussage from "@/pages/demoussage";
+import Xylophage from "@/pages/xylophage";
+import PoudrageToitureExpress from "@/pages/poudrage-toiture-express";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +38,11 @@ const App = () => (
           <Route path="/services/depigeonnage" element={<><Header /><ServicePigeons /><Footer /></>} />
           <Route path="/services/desinsectisation-moustiques" element={<><Header /><ServiceMoustiques /><Footer /></>} />
           <Route path="/services/desinsectisation-termites" element={<><Header /><ServiceTermites /><Footer /></>} />
+          <Route path="/services/chenille-processionnaire" element={<><Header /><ChenilleProcessionnaire /><Footer /></>} />
+          <Route path="/services/taupe" element={<><Header /><Taupe /><Footer /></>} />
+          <Route path="/services/demoussage" element={<><Header /><Demoussage /><Footer /></>} />
+          <Route path="/services/xylophage" element={<><Header /><Xylophage /><Footer /></>} />
+          <Route path="/services/poudrage-toiture-express" element={<><Header /><PoudrageToitureExpress /><Footer /></>} />
           <Route path="/devis" element={<Devis />} />
           <Route path="/a-propos" element={<><Header /><About /><Footer /></>} />
           <Route path="/confirmation" element={<><Confirmation /></>} />

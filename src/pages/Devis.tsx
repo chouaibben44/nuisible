@@ -88,7 +88,6 @@ const Devis = () => {
       if (error) throw error;
 
       if (data?.ok) {
-        // Optional toast
         // toast({ title: "Demande envoyée", description: "Redirection..." });
         navigate("/confirmation", { replace: true });
       } else {
@@ -113,7 +112,7 @@ const Devis = () => {
         <title>Demande de devis gratuit – Intervention sous 24h</title>
         <meta
           name="description"
-          content="Estimez votre traitement : dépigeonnage, moustiques, termites. Réponse rapide, conseils d’experts, prix transparents. Demande 100% gratuite."
+          content="Estimez votre traitement : dépigeonnage, moustiques, termites, chenille processionnaire, taupe, démoussage, xylophages, poudrage toiture express. Réponse rapide, conseils d’experts, prix transparents. Demande 100% gratuite."
         />
       </Helmet>
 
@@ -225,6 +224,14 @@ const Devis = () => {
                               <SelectItem value="pigeons">Pigeons</SelectItem>
                               <SelectItem value="moustiques">Moustiques</SelectItem>
                               <SelectItem value="termites">Termites</SelectItem>
+
+                              {/* --- New services --- */}
+                              <SelectItem value="chenille-processionnaire">Chenille processionnaire</SelectItem>
+                              <SelectItem value="taupe">Taupe</SelectItem>
+                              <SelectItem value="demoussage">Démoussage</SelectItem>
+                              <SelectItem value="xylophages">Xylophages</SelectItem>
+                              <SelectItem value="poudrage-toiture-express">Poudrage toiture express (guêpes)</SelectItem>
+
                               <SelectItem value="autre">Autre nuisible</SelectItem>
                             </SelectContent>
                           </Select>
@@ -308,11 +315,11 @@ const Devis = () => {
                         <div className="font-semibold">06 98 66 93 78</div>
                       </div>
                     </a>
-                    <a href="mailto:contact@expert-nuisibles.fr" className="flex items-center gap-3 hover:text-accent transition-colors">
+                    <a href="mailto:contact@eradication-nuisibles.fr" className="flex items-center gap-3 hover:text-accent transition-colors">
                       <Mail className="h-5 w-5" />
                       <div>
                         <div className="text-sm opacity-80">Email</div>
-                        <div className="font-semibold">contact@expert-nuisibles.fr</div>
+                        <div className="font-semibold">contact@eradication-nuisibles.fr</div>
                       </div>
                     </a>
                     <div className="flex items-center gap-3">

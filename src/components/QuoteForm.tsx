@@ -13,13 +13,19 @@ import {
 import { useNavigate } from "react-router-dom"; // ← add this
 
 interface QuoteFormProps {
-  defaultService?: "pigeons" | "moustiques" | "termites";
+  defaultService?: "pigeons" | "moustiques" | "termites" | "Chenilles processionnaires" | "Taupe" | "Xylophages" | "Démoussage" | "Poudrage toiture exprèss (guêpes)";
 }
 
 const pretty = (v?: string) =>
   v === "pigeons" ? "Pigeons" :
   v === "moustiques" ? "Moustiques" :
-  v === "termites" ? "Termites" : v ?? "";
+  v === "termites" ? "Termites" :
+  v === "chenille-processionnaire" ? "Chenille processionnaire" :
+  v === "taupe" ? "Taupe" :
+  v === "demoussage" ? "Démoussage" :
+  v === "xylophage" ? "Xylophages" :
+  v === "poudrage-toiture-express" ? "Poudrage toiture express (guêpes)" :
+  v ?? "";
 
 export const QuoteForm = ({ defaultService }: QuoteFormProps) => {
   const navigate = useNavigate(); // ← add this

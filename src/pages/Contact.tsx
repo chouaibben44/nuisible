@@ -141,8 +141,8 @@ const Contact = () => {
                 </div>
                 <h3 className="text-lg font-heading font-semibold mb-2">Email</h3>
                 <p className="text-sm text-muted-foreground mb-2">Réponse sous 24h</p>
-                <a href="mailto:contact@expert-nuisibles.fr" className="text-primary hover:text-primary-light font-semibold break-all">
-                  contact@expert-nuisibles.fr
+                <a href="mailto:contact@eradication-nuisibles.fr" className="text-primary hover:text-primary-light font-semibold break-all">
+                  contact@eradication-nuisibles.fr
                 </a>
               </CardContent>
             </Card>

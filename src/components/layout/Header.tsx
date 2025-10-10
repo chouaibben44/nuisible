@@ -1,8 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, ChevronDown, ChevronRight, Bug, Bird, Shield, PhoneCall } from 'lucide-react';
+import {
+  Menu,
+  X,
+  Phone,
+  Mail,
+  ChevronDown,
+  ChevronRight,
+  Bug,
+  Bird,
+  Shield,
+  Worm,
+  PhoneCall,
+  Droplets,
+  Mountain,
+  Zap,
+  ShieldCheck,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import logo from '@/images/Éradication-nuisibles-logo.webp';
+import waspIcon from '@/assets/wasp.svg';
+import moleIcon from '@/assets/mole.svg';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,9 +64,9 @@ const Header = () => {
             <Phone className="h-4 w-4" />
             <span className="hidden sm:inline">06 98 66 93 78</span>
           </a>
-          <a href="mailto:contact@expert-nuisibles.fr" className="flex items-center gap-2 hover:text-accent transition-colors">
+          <a href="mailto:contact@eradication-nuisibles.fr" className="flex items-center gap-2 hover:text-accent transition-colors">
             <Mail className="h-4 w-4" />
-            <span className="hidden sm:inline">contact@expert-nuisibles.fr</span>
+            <span className="hidden sm:inline">contact@eradication-nuisibles.fr</span>
           </a>
         </div>
       </div>
@@ -57,19 +75,18 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-20 items-center justify-between">
           {/* Brand / Logo */}
-<Link to="/" className="flex items-center" aria-label="Accueil Éradication Nuisibles">
-  <img
-    src={logo}
-    alt="Éradication Nuisibles"
-    width={180}          // <-- control the width here
-    height={44}
-    className="block h-auto w-[200px] md:w-[200px]" // mobile & desktop widths
-    loading="eager"
-    decoding="async"
-  />
-  <span className="sr-only">Solutions professionnelles</span>
-</Link>
-
+          <Link to="/" className="flex items-center" aria-label="Accueil Éradication Nuisibles">
+            <img
+              src={logo}
+              alt="Éradication Nuisibles"
+              width={180}
+              height={44}
+              className="block h-auto w-[200px] md:w-[200px]"
+              loading="eager"
+              decoding="async"
+            />
+            <span className="sr-only">Solutions professionnelles</span>
+          </Link>
 
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center space-x-6">
@@ -106,23 +123,21 @@ const Header = () => {
                 <div
                   role="menu"
                   aria-label="Sous-menu Services"
-                  className="absolute left-1/2 top-full -translate-x-1/2 mt-3 w-[720px] rounded-2xl border bg-popover shadow-xl ring-1 ring-black/5 z-[60] pointer-events-auto"
+                  className="absolute left-1/2 top-full -translate-x-1/2 mt-3 w-[960px] rounded-2xl border bg-popover shadow-xl ring-1 ring-black/5 z-[60] pointer-events-auto"
                 >
-                  <div className="grid grid-cols-3 gap-4 p-4">
-                    {/* Card 1 */}
+                  {/* Cards grid: expanded to 4 columns to fit 8 items cleanly */}
+                  <div className="grid grid-cols-4 gap-4 p-4">
+                    {/* Card 1 - Dépigeonnage */}
                     <Link
                       to="/services/depigeonnage"
                       className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
                     >
-                      {/* Top row: icon + title */}
                       <div className="flex items-center gap-3">
                         <div className="rounded-lg border p-2 group-hover:border-primary/40">
                           <Bird className="h-5 w-5" />
                         </div>
                         <div className="font-semibold group-hover:text-primary">Dépigeonnage</div>
                       </div>
-
-                      {/* Bottom container: full width text + CTA */}
                       <div className="mt-3">
                         <p className="text-sm text-muted-foreground leading-snug">
                           Filets, pics, répulsifs et solutions durables contre les volatiles.
@@ -133,7 +148,7 @@ const Header = () => {
                       </div>
                     </Link>
 
-                    {/* Card 2 */}
+                    {/* Card 2 - Désinsectisation moustiques */}
                     <Link
                       to="/services/desinsectisation-moustiques"
                       className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
@@ -144,7 +159,6 @@ const Header = () => {
                         </div>
                         <div className="font-semibold group-hover:text-primary">Désinsectisation moustiques</div>
                       </div>
-
                       <div className="mt-3">
                         <p className="text-sm text-muted-foreground leading-snug">
                           Traitements ciblés, larvicide et plan d’action préventif.
@@ -155,7 +169,7 @@ const Header = () => {
                       </div>
                     </Link>
 
-                    {/* Card 3 */}
+                    {/* Card 3 - Désinsectisation termites */}
                     <Link
                       to="/services/desinsectisation-termites"
                       className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
@@ -166,10 +180,114 @@ const Header = () => {
                         </div>
                         <div className="font-semibold group-hover:text-primary">Désinsectisation termites</div>
                       </div>
-
                       <div className="mt-3">
                         <p className="text-sm text-muted-foreground leading-snug">
                           Diagnostics, barrières et traitements curatifs certifiés.
+                        </p>
+                        <span className="mt-2 inline-flex items-center text-xs text-primary">
+                          Découvrir <ChevronRight className="ml-1 h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Card 4 - Chenille processionnaire */}
+                    <Link
+                      to="/services/chenille-processionnaire"
+                      className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-lg border p-2 group-hover:border-primary/40">
+                          <Worm className="h-5 w-5" />
+                        </div>
+                        <div className="font-semibold group-hover:text-primary">Chenille processionnaire</div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          Échenillage, piégeage et prévention anti-urtication sécurisée.
+                        </p>
+                        <span className="mt-2 inline-flex items-center text-xs text-primary">
+                          Découvrir <ChevronRight className="ml-1 h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Card 5 - Taupe */}
+                    <Link
+                      to="/services/taupe"
+                      className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-lg border p-2 group-hover:border-primary/40">
+                          <img src={moleIcon} alt="" className="h-auto w-5" loading="lazy" />
+                        </div>
+                        <div className="font-semibold group-hover:text-primary">Taupe</div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          Repérage des galeries et piégeage professionnel avec suivi.
+                        </p>
+                        <span className="mt-2 inline-flex items-center text-xs text-primary">
+                          Découvrir <ChevronRight className="ml-1 h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Card 6 - Démoussage */}
+                    <Link
+                      to="/services/demoussage"
+                      className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-lg border p-2 group-hover:border-primary/40">
+                          <Droplets className="h-5 w-5" />
+                        </div>
+                        <div className="font-semibold group-hover:text-primary">Démoussage</div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          Nettoyage toiture et façades, traitement préventif adapté.
+                        </p>
+                        <span className="mt-2 inline-flex items-center text-xs text-primary">
+                          Découvrir <ChevronRight className="ml-1 h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Card 7 - Xylophage */}
+                    <Link
+                      to="/services/xylophage"
+                      className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-lg border p-2 group-hover:border-primary/40">
+                          <Bug className="h-5 w-5" />
+                        </div>
+                        <div className="font-semibold group-hover:text-primary">Xylophages</div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          Vrillettes, lyctus, capricornes et larves du bois, traitement complet.
+                        </p>
+                        <span className="mt-2 inline-flex items-center text-xs text-primary">
+                          Découvrir <ChevronRight className="ml-1 h-3 w-3" />
+                        </span>
+                      </div>
+                    </Link>
+
+                    {/* Card 8 - Poudrage toiture express */}
+                    <Link
+                      to="/services/poudrage-toiture-express"
+                      className="group rounded-xl border p-4 transition-colors hover:border-primary/30 hover:bg-muted/40 hover:shadow-sm focus:outline-none"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-lg border p-2 group-hover:border-primary/40">
+                          <img src={waspIcon} alt="" className="h-auto w-8" loading="lazy" />
+                        </div>
+                        <div className="font-semibold group-hover:text-primary">Poudrage toiture exprèss</div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          Neutralisation rapide des nids de guêpes en hauteur.
                         </p>
                         <span className="mt-2 inline-flex items-center text-xs text-primary">
                           Découvrir <ChevronRight className="ml-1 h-3 w-3" />
@@ -279,6 +397,85 @@ const Header = () => {
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Shield className="h-4 w-4" /> Désinsectisation termites
+                    </Link>
+
+                    {/* New items */}
+                    <Link
+                      to="/services/chenille-processionnaire"
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Worm className="h-4 w-4" /> Chenille processionnaire
+                    </Link>
+                    <Link
+                      to="/services/taupe"
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span
+  className="md:hidden inline-block h-4 w-4 bg-muted-foreground"
+  style={{
+    WebkitMaskImage: `url(${moleIcon})`,
+    maskImage: `url(${moleIcon})`,
+    WebkitMaskRepeat: 'no-repeat',
+    maskRepeat: 'no-repeat',
+    WebkitMaskSize: 'contain',
+    maskSize: 'contain',
+    WebkitMaskPosition: 'center',
+    maskPosition: 'center',
+  }}
+  aria-hidden
+/>
+
+{/* Desktop original-color icon */}
+<img
+  src={moleIcon}
+  alt=""
+  className="hidden md:block h-4 w-4"
+  loading="lazy"
+/> Taupe
+                    </Link>
+                    <Link
+                      to="/services/demoussage"
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Droplets className="h-4 w-4" /> Démoussage
+                    </Link>
+                    <Link
+                      to="/services/xylophage"
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Bug className="h-4 w-4" /> Xylophage
+                    </Link>
+                    <Link
+                      to="/services/poudrage-toiture-express"
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span
+  className="md:hidden inline-block h-4 w-4 bg-muted-foreground"
+  style={{
+    WebkitMaskImage: `url(${waspIcon})`,
+    maskImage: `url(${waspIcon})`,
+    WebkitMaskRepeat: 'no-repeat',
+    maskRepeat: 'no-repeat',
+    WebkitMaskSize: 'contain',
+    maskSize: 'contain',
+    WebkitMaskPosition: 'center',
+    maskPosition: 'center',
+  }}
+  aria-hidden
+/>
+
+{/* desktop = original SVG color */}
+<img
+  src={waspIcon}
+  alt=""
+  className="hidden md:block h-4 w-4"
+  loading="lazy"
+/> Poudrage toiture exprèss
                     </Link>
                   </div>
                 )}

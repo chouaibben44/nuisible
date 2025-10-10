@@ -153,10 +153,10 @@ const Footer = () => {
                 <div>
                   <p className="text-sm text-primary-foreground/80">Email</p>
                   <a
-                    href="mailto:contact@expert-nuisibles.fr"
+                    href="mailto:contact@eradication-nuisibles.fr"
                     className="text-sm font-medium hover:text-accent transition-colors"
                   >
-                    contact@expert-nuisibles.fr
+                    contact@eradication-nuisibles.fr
                   </a>
                 </div>
               </li>
