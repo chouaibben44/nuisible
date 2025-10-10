@@ -16,8 +16,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/images/Éradication-nuisibles-logo.webp";
+
+/** SVGs for desktop <img> usage */
 import waspIcon from "@/assets/wasp.svg";
 import moleIcon from "@/assets/mole.svg";
+
+/** Raw SVG for mobile CSS masks to be stable on Netlify/iOS */
+import waspSvgRaw from "@/assets/wasp.svg?raw";
+import moleSvgRaw from "@/assets/mole.svg?raw";
+
+/** Data URIs remove any path/CORS ambiguity in prod */
+const waspDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(waspSvgRaw)}`;
+const moleDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(moleSvgRaw)}`;
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,12 +67,11 @@ const Header = () => {
   }, [isServicesOpenDesktop]);
 
   // Close any open menus on route change
-useEffect(() => {
-  setIsMenuOpen(false);
-  setIsServicesOpenDesktop(false);
-  setIsServicesOpenMobile(false);
-}, [location.pathname, location.search, location.hash]);
-
+  useEffect(() => {
+    setIsMenuOpen(false);
+    setIsServicesOpenDesktop(false);
+    setIsServicesOpenMobile(false);
+  }, [location.pathname, location.search, location.hash]);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -535,22 +544,20 @@ useEffect(() => {
                     >
                       <Worm className="h-4 w-4" /> Chenille processionnaire
                     </Link>
+
                     <Link
                       to="/services/taupe"
                       className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
                       onClick={() => setIsMenuOpen(false)}
                     >
+                      {/* Mobile masked icon using data URL to be stable on Netlify/iOS */}
                       <span
-                        className="md:hidden inline-block h-4 w-4 bg-muted-foreground"
+                        className="md:hidden inline-block h-4 w-4 align-middle"
                         style={{
-                          WebkitMaskImage: `url(${moleIcon})`,
-                          maskImage: `url(${moleIcon})`,
-                          WebkitMaskRepeat: "no-repeat",
-                          maskRepeat: "no-repeat",
-                          WebkitMaskSize: "contain",
-                          maskSize: "contain",
-                          WebkitMaskPosition: "center",
-                          maskPosition: "center",
+                          WebkitMask: `url("${moleDataUrl}") center / contain no-repeat`,
+                          mask: `url("${moleDataUrl}") center / contain no-repeat`,
+                          backgroundColor: "currentColor",
+                          display: "inline-block",
                         }}
                         aria-hidden
                       />
@@ -563,6 +570,7 @@ useEffect(() => {
                       />{" "}
                       Taupe
                     </Link>
+
                     <Link
                       to="/services/demoussage"
                       className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
@@ -570,6 +578,7 @@ useEffect(() => {
                     >
                       <Droplets className="h-4 w-4" /> Démoussage
                     </Link>
+
                     <Link
                       to="/services/xylophage"
                       className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
@@ -577,34 +586,32 @@ useEffect(() => {
                     >
                       <Bug className="h-4 w-4" /> Xylophage
                     </Link>
-                    <Link
-  to="/services/poudrage-toiture-express"
-  className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
-  onClick={() => setIsMenuOpen(false)}
->
-  <span
-    className="md:hidden inline-block h-4 w-4 align-middle"
-    style={{
-      // Safari-friendly shorthand: image + position / size + repeat
-      WebkitMask: `url(${waspIcon}) center / contain no-repeat`,
-      mask: `url(${waspIcon}) center / contain no-repeat`,
-      // color source for the masked shape
-      backgroundColor: "currentColor",
-      // ensure it behaves as a proper box
-      display: "inline-block",
-    }}
-    aria-hidden
-  />
-  {/* desktop = original SVG color */}
-  <img
-    src={waspIcon}
-    alt=""
-    className="hidden md:block h-4 w-4"
-    loading="lazy"
-  />{" "}
-  Poudrage toiture exprèss
-</Link>
 
+                    <Link
+                      to="/services/poudrage-toiture-express"
+                      className="flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground hover:text-primary"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {/* Mobile masked icon using data URL to be stable on Netlify/iOS */}
+                      <span
+                        className="md:hidden inline-block h-4 w-4 align-middle"
+                        style={{
+                          WebkitMask: `url("${waspDataUrl}") center / contain no-repeat`,
+                          mask: `url("${waspDataUrl}") center / contain no-repeat`,
+                          backgroundColor: "currentColor",
+                          display: "inline-block",
+                        }}
+                        aria-hidden
+                      />
+                      {/* desktop = original SVG color */}
+                      <img
+                        src={waspIcon}
+                        alt=""
+                        className="hidden md:block h-4 w-4"
+                        loading="lazy"
+                      />{" "}
+                      Poudrage toiture exprèss
+                    </Link>
                   </div>
                 )}
               </div>
