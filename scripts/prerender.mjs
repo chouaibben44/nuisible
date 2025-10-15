@@ -18,6 +18,7 @@ const ROUTES = [
   "/contact",
   "/devis",
   "/services",
+  "/mentions-legales",
   "/services/depigeonnage",
   "/services/desinsectisation-moustiques",
   "/services/desinsectisation-termites",

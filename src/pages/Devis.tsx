@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -67,13 +66,12 @@ const Devis = () => {
   };
 
   const onSubmit = async (values: FormValues) => {
-    // Build payload expected by the Edge Function
     const payload = {
       name: values.name,
-      phone: values.phone, // already numeric-only and validated
+      phone: values.phone,
       email: values.email,
       city: values.city,
-      service: values.nuisibleType, // map -> "service" for the function/DB
+      service: values.nuisibleType,
       message: values.message,
       hp: values.hp || "",
     };
@@ -88,7 +86,6 @@ const Devis = () => {
       if (error) throw error;
 
       if (data?.ok) {
-        // toast({ title: "Demande envoyée", description: "Redirection..." });
         navigate("/confirmation", { replace: true });
       } else {
         toast({
@@ -133,140 +130,8 @@ const Devis = () => {
         <section className="pt-6 sm:pt-12 pb-16">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 max-w-6xl mx-auto">
-              {/* Formulaire */}
-              <div className="bg-background rounded-lg shadow-elegant p-5 sm:p-8">
-                <h2 className="text-xl sm:text-2xl font-heading font-bold mb-5 sm:mb-6 text-primary">
-                  Remplissez le formulaire
-                </h2>
-
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                    {/* Honeypot (hidden) */}
-                    <input type="text" {...form.register("hp")} className="hidden" tabIndex={-1} autoComplete="off" />
-
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Nom complet *</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Votre nom" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Téléphone *</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="06 12 34 56 78"
-                              inputMode="numeric"
-                              maxLength={10}
-                              value={field.value}
-                              onChange={(e) => handlePhoneChange(e.target.value)}
-                              autoComplete="tel"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email *</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="votre@email.fr" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {/* City (required by your DB/function) */}
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Ville *</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Votre ville" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="nuisibleType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Type de nuisible *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Sélectionnez un nuisible" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="pigeons">Pigeons</SelectItem>
-                              <SelectItem value="moustiques">Moustiques</SelectItem>
-                              <SelectItem value="termites">Termites</SelectItem>
-
-                              {/* --- New services --- */}
-                              <SelectItem value="chenille-processionnaire">Chenille processionnaire</SelectItem>
-                              <SelectItem value="taupe">Taupe</SelectItem>
-                              <SelectItem value="demoussage">Démoussage</SelectItem>
-                              <SelectItem value="xylophages">Xylophages</SelectItem>
-                              <SelectItem value="poudrage-toiture-express">Poudrage toiture express (guêpes)</SelectItem>
-
-                              <SelectItem value="autre">Autre nuisible</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Décrivez votre problème *</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Décrivez votre situation, la superficie à traiter, etc."
-                              className="min-h-[120px]"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <Button type="submit" size="lg" className="w-full">
-                      Envoyer ma demande de devis
-                    </Button>
-                  </form>
-                </Form>
-              </div>
-
-              {/* Informations de contact */}
-              <div className="space-y-6">
+              {/* Left column (info) on large screens; second on mobile */}
+              <div className="order-2 lg:order-1 space-y-6">
                 <div className="bg-background rounded-lg shadow-soft p-6 sm:p-8">
                   <h2 className="text-xl sm:text-2xl font-heading font-bold mb-5 sm:mb-6 text-primary">
                     Pourquoi nous faire confiance ?
@@ -338,7 +203,139 @@ const Devis = () => {
                     </div>
                   </div>
                 </div>
-              </div>{/* /col droite */}
+              </div>
+
+              {/* Right column (form) on large screens; first on mobile */}
+              <div className="order-1 lg:order-2 bg-background rounded-lg shadow-elegant p-5 sm:p-8">
+                <h2 className="text-xl sm:text-2xl font-heading font-bold mb-5 sm:mb-6 text-primary">
+                  Remplissez le formulaire
+                </h2>
+
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    {/* Honeypot (hidden) */}
+                    <input type="text" {...form.register("hp")} className="hidden" tabIndex={-1} autoComplete="off" />
+
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nom complet *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Votre nom" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Téléphone *</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="06 12 34 56 78"
+                              inputMode="numeric"
+                              maxLength={10}
+                              value={field.value}
+                              onChange={(e) => handlePhoneChange(e.target.value)}
+                              autoComplete="tel"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email *</FormLabel>
+                          <FormControl>
+                            <Input type="email" placeholder="votre@email.fr" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* City */}
+                    <FormField
+                      control={form.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ville *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Votre ville" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="nuisibleType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Type de nuisible *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Sélectionnez un nuisible" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="pigeons">Pigeons</SelectItem>
+                              <SelectItem value="moustiques">Moustiques</SelectItem>
+                              <SelectItem value="termites">Termites</SelectItem>
+
+                              {/* --- New services --- */}
+                              <SelectItem value="chenille-processionnaire">Chenille processionnaire</SelectItem>
+                              <SelectItem value="taupe">Taupe</SelectItem>
+                              <SelectItem value="demoussage">Démoussage</SelectItem>
+                              <SelectItem value="xylophages">Xylophages</SelectItem>
+                              <SelectItem value="poudrage-toiture-express">Poudrage toiture express (guêpes)</SelectItem>
+
+                              <SelectItem value="autre">Autre nuisible</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Décrivez votre problème *</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Décrivez votre situation, la superficie à traiter, etc."
+                              className="min-h-[120px]"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <Button type="submit" size="lg" className="w-full">
+                      Envoyer ma demande de devis
+                    </Button>
+                  </form>
+                </Form>
+              </div>
             </div>
           </div>
         </section>

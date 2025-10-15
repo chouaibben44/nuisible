@@ -20,19 +20,14 @@ import waspRaw from "@/assets/wasp.svg?raw";
 /** Parse <svg …viewBox="…">…</svg> into {viewBox, inner} and strip inline fill/stroke/colors */
 function parseSvg(raw: string) {
   const viewBox = (raw.match(/viewBox="([^"]+)"/i) || [])[1] || "0 0 24 24";
-  // strip outer <svg> wrapper
   let inner = raw.replace(/^[\s\S]*?<svg[^>]*>/i, "").replace(/<\/svg>\s*$/i, "");
-
-  // Remove any inline color/style so root props control appearance
   inner = inner
     .replace(/\sfill\s*=\s*("[^"]*"|'[^']*')/gi, "")
     .replace(/\sstroke\s*=\s*("[^"]*"|'[^']*')/gi, "")
     .replace(/\sstyle\s*=\s*("[^"]*"|'[^']*')/gi, "");
-
   return { viewBox, inner };
 }
 
-/** Inline fill icon: 24x24 box, fill = currentColor (so `text-*` controls color) */
 const makeLucideFillIcon =
   (raw: string) =>
   ({ className = "" }: { className?: string }) => {
@@ -52,16 +47,13 @@ const makeLucideFillIcon =
     );
   };
 
-// Only these two are custom-filled (white via text-primary-foreground)
 const MoleFilledIcon = makeLucideFillIcon(moleRaw);
 const WaspFilledIcon = makeLucideFillIcon(waspRaw);
 
-// Existing images
 import pigeonImage from "@/assets/service-pigeons.jpg";
 import mosquitoImage from "@/assets/service-mosquitoes.jpg";
 import termiteImage from "@/assets/service-termites.jpg";
 
-// New images
 import serviceTaupe from "@/assets/service-taupe.webp";
 import servicePoudrage from "@/assets/poudrage-express.webp";
 import serviceXylophage from "@/assets/xylophage.webp";
@@ -70,7 +62,6 @@ import serviceChenille from "@/assets/chenilles processionnaires.webp";
 
 type Service = {
   icon: React.ElementType<{ className?: string }>;
-  /** Extra classes just for the icon (kept for compatibility) */
   iconClass?: string;
   title: string;
   description: string;
@@ -107,8 +98,6 @@ const services: Service[] = [
     link: "/services/desinsectisation-termites",
     highlights: ["Intervention rapide", "Procédé certifié", "Suivi post-traitement"],
   },
-
-  // ---- NEW ----
   {
     icon: Worm,
     title: "Chenille processionnaire",
@@ -119,7 +108,7 @@ const services: Service[] = [
     highlights: ["Sécurisation du site", "Intervention rapide", "Anti-réinfestation"],
   },
   {
-    icon: MoleFilledIcon, // will fill with currentColor (white via text-primary-foreground)
+    icon: MoleFilledIcon,
     title: "Taupe",
     description:
       "Repérage des galeries et piégeage professionnel avec suivi, pour pelouses et espaces verts préservés.",
@@ -146,7 +135,7 @@ const services: Service[] = [
     highlights: ["Diagnostic précis", "Traitement certifié", "Suivi et conseils"],
   },
   {
-    icon: WaspFilledIcon, // will fill with currentColor (white via text-primary-foreground)
+    icon: WaspFilledIcon,
     title: "Poudrage toiture express (guêpes)",
     description:
       "Neutralisation rapide des nids en hauteur par poudrage, sans démontage de toiture.",
@@ -156,7 +145,6 @@ const services: Service[] = [
   },
 ];
 
-// Utility to chunk array into pages of N items
 function chunk<T>(arr: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
@@ -166,10 +154,7 @@ function chunk<T>(arr: T[], size: number): T[][] {
 const AUTO_PLAY_MS = 4500;
 
 const ServicesSection = () => {
-  // responsive slides: 1 on mobile, 3 on md+
   const [itemsPerSlide, setItemsPerSlide] = useState(1);
-
-  // Compute slides whenever itemsPerSlide changes
   const slides = useMemo(() => chunk(services, itemsPerSlide), [itemsPerSlide]);
   const total = slides.length;
 
@@ -177,7 +162,6 @@ const ServicesSection = () => {
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<number | null>(null);
 
-  // Listen to breakpoint (md: 768px)
   useEffect(() => {
     const mq = window.matchMedia("(min-width: 768px)");
     const apply = () => setItemsPerSlide(mq.matches ? 3 : 1);
@@ -186,12 +170,10 @@ const ServicesSection = () => {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  // Keep index valid if total changes
   useEffect(() => {
     setIndex((i) => (total ? i % total : 0));
   }, [total]);
 
-  // Autoplay (pause on hover/touch)
   useEffect(() => {
     if (paused || total <= 1) return;
     timerRef.current = window.setInterval(() => {
@@ -273,9 +255,11 @@ const ServicesSection = () => {
                     {page.map((service) => {
                       const Icon = service.icon;
                       return (
-                        <div
+                        <Link
                           key={service.title}
-                          className="group relative rounded-2xl transition-transform duration-300 hover:-translate-y-[1px]"
+                          to={service.link}
+                          aria-label={`En savoir plus sur ${service.title}`}
+                          className="group relative block rounded-2xl transition-transform duration-300 hover:-translate-y-[1px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                         >
                           {/* subtle primary rim on hover */}
                           <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-1 ring-primary/15 pointer-events-none" />
@@ -295,7 +279,6 @@ const ServicesSection = () => {
                               <div className="absolute bottom-4 left-4 right-4">
                                 <div className="flex items-center gap-3">
                                   <div className="rounded-lg border border-white/30 bg-white/10 backdrop-blur p-2">
-                                    {/* Icons use text-* color; custom ones fill with currentColor */}
                                     <Icon
                                       className={`h-5 w-5 text-primary-foreground ${service.iconClass ?? ""}`}
                                       aria-hidden
@@ -314,7 +297,6 @@ const ServicesSection = () => {
                                 {service.description}
                               </p>
 
-                              {/* highlights */}
                               {service.highlights?.length ? (
                                 <div className="mt-4 flex flex-wrap gap-2">
                                   {service.highlights.map((h) => (
@@ -328,21 +310,14 @@ const ServicesSection = () => {
                                 </div>
                               ) : null}
 
-                              {/* divider */}
                               <div className="mt-5 h-px w-full bg-zinc-100" />
 
-                              {/* CTA row */}
+                              {/* CTA row (styled span to avoid nested anchors) */}
                               <div className="mt-4 flex items-center justify-between">
-                                <Button
-                                  variant="link"
-                                  asChild
-                                  className="px-0 text-[14.5px] font-medium decoration-transparent hover:decoration-current underline-offset-[6px] hover:underline"
-                                >
-                                  <Link to={service.link} aria-label={`En savoir plus sur ${service.title}`}>
-                                    En savoir plus
-                                    <ArrowRight className="ml-2 h-4 w-4 inline-block translate-x-0 transition-transform group-hover:translate-x-[3px]" />
-                                  </Link>
-                                </Button>
+                                <span className="px-0 text-[14.5px] font-medium underline-offset-[6px] group-hover:underline">
+                                  En savoir plus
+                                  <ArrowRight className="ml-2 h-4 w-4 inline-block translate-x-0 transition-transform group-hover:translate-x-[3px]" />
+                                </span>
 
                                 <div className="flex items-center gap-2 text-[11.5px] text-zinc-500">
                                   <Clock3 className="h-3.5 w-3.5" />
@@ -351,7 +326,7 @@ const ServicesSection = () => {
                               </div>
                             </div>
                           </Card>
-                        </div>
+                        </Link>
                       );
                     })}
                   </div>

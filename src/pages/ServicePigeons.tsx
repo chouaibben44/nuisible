@@ -33,19 +33,17 @@ const pigeonsFAQ = [
 const ServicePigeons = () => {
   return (
     <>
-        
-            <Helmet>
-                <title>Dépigeonnage professionnel – Filets, pics & répulsifs</title>
-                <meta
-                  name="description"
-                  content="Dépigeonnage et solutions durable contre les pigeons : pose de pics, filets, solutions anti-salissures. Techniciens certifiés, intervention rapide. Devis gratuit."
-                />
-              </Helmet>
-
+      <Helmet>
+        <title>Dépigeonnage professionnel – Filets, pics & répulsifs</title>
+        <meta
+          name="description"
+          content="Dépigeonnage et solutions durable contre les pigeons : pose de pics, filets, solutions anti-salissures. Techniciens certifiés, intervention rapide. Devis gratuit."
+        />
+      </Helmet>
 
       <FloatingCallButton />
 
-      {/* HERO (même style que moustiques) */}
+      {/* HERO */}
       <section className="relative h-[30vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -94,10 +92,11 @@ const ServicePigeons = () => {
         </div>
       </section>
 
-      {/* CONTENU PRINCIPAL */}
+      {/* CONTENU PRINCIPAL - FIXED: Added min-height and removed potential overflow issues */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4">
-          <div className="grid gap-10 sm:gap-12 lg:grid-cols-3">
+          <div className="grid gap-10 sm:gap-12 lg:grid-cols-3 min-h-[800px]"> {/* Added min-height */}
+            
             {/* Colonne gauche : contenu */}
             <div className="lg:col-span-2 space-y-10 sm:space-y-12">
               {/* Description */}
@@ -241,10 +240,12 @@ const ServicePigeons = () => {
               </div>
             </div>
 
-            {/* Colonne droite : formulaire sticky (desktop/tablette) */}
+            {/* Colonne droite : formulaire sticky - FIXED VERSION */}
             <aside className="hidden sm:block lg:col-span-1">
-              <div className="sm:sticky sm:top-24">
-                <QuoteForm defaultService="pigeons" />
+              <div className="sticky top-6 z-10"> {/* Added z-index */}
+                <div className="rounded-xl border bg-white p-6 shadow-lg">
+                  <QuoteForm defaultService="pigeons" />
+                </div>
               </div>
             </aside>
           </div>

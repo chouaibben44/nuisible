@@ -12,6 +12,7 @@ import ServicePigeons from "./pages/ServicePigeons";
 import ServiceMoustiques from "./pages/ServiceMoustiques";
 import ServiceTermites from "./pages/ServiceTermites";
 import Devis from "./pages/Devis";
+import Mentionlegales from "./pages/Mentionlegales"
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ScrollToTop from "./ScrollToTop";
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/a-propos" element={<><Header /><About /><Footer /></>} />
           <Route path="/confirmation" element={<><Confirmation /></>} />
           <Route path="/contact" element={<><Header /><Contact /><Footer /></>} />
+          <Route path="/mentions-legales" element={<><Header /><Mentionlegales /><Footer /></>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

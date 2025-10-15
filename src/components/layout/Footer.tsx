@@ -172,16 +172,10 @@ const Footer = () => {
             </p>
             <div className="flex gap-4">
               <Link
-                to="#"
+                to="/mentions-legales"
                 className="text-sm pb-12 text-primary-foreground/70 hover:text-accent transition-colors"
               >
                 Mentions légales
-              </Link>
-              <Link
-                to="#"
-                className="text-sm pb-12 text-primary-foreground/70 hover:text-accent transition-colors"
-              >
-                Politique de confidentialité
               </Link>
             </div>
           </div>

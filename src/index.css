@@ -112,3 +112,10 @@
     @apply overflow-x-hidden;
   }
 }
+
+/* Add to your global CSS for debugging */
+.debug-sticky {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  border: 2px solid red !important; /* To visualize the sticky element */
+}
