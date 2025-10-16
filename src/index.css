@@ -107,8 +107,7 @@
     @apply bg-background text-foreground;
   }
 
-  html,
-  body {
+  html {
     @apply overflow-x-hidden;
   }
 }

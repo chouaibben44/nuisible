@@ -280,11 +280,13 @@ const ServiceMoustiques = () => {
             </div>
 
             {/* Right Column - Quote Form (desktop / tablet only) */}
-            <div className="lg:col-span-1 hidden sm:block">
-              <div className="sm:sticky sm:top-24">
-                <QuoteForm defaultService="moustiques" />
+            <aside className="hidden sm:block lg:col-span-1">
+              <div className="sticky top-6 z-10"> {/* Added z-index */}
+                <div className="rounded-xl border bg-white p-6 shadow-lg">
+                  <QuoteForm defaultService="moustiques" />
+                </div>
               </div>
-            </div>
+            </aside>
           </div>
         </div>
       </section>

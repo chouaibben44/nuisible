@@ -236,8 +236,10 @@ const ServicePoudrageToitureExpress = () => {
 
             {/* Colonne droite : formulaire sticky */}
             <aside className="hidden sm:block lg:col-span-1">
-              <div className="sm:sticky sm:top-24">
-                <QuoteForm defaultService="Poudrage toiture exprèss (guêpes)" />
+              <div className="sticky top-6 z-10"> {/* Added z-index */}
+                <div className="rounded-xl border bg-white p-6 shadow-lg">
+                  <QuoteForm defaultService="Poudrage toiture exprèss (guêpes)" />
+                </div>
               </div>
             </aside>
           </div>
