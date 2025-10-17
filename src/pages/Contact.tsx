@@ -96,7 +96,7 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact – Parlez à un expert | Éradication Nuisibles</title>
+        <title>Contact – Parlez à un expert | Nuisitech</title>
         <meta
           name="description"
           content="Des questions sur nos services de dépigeonnage ou désinsectisation ? Contactez-nous : formulaire, email ou téléphone. Réponse sous 24 h."
@@ -140,8 +140,8 @@ const Contact = () => {
                   </div>
                   <h3 className="text-lg font-heading font-semibold mb-2">Email</h3>
                   <p className="text-sm text-muted-foreground mb-2">Réponse sous 24h</p>
-                  <a href="mailto:contact@eradication-nuisibles.fr" className="text-primary hover:text-primary-light font-semibold break-all">
-                    contact@eradication-nuisibles.fr
+                  <a href="mailto:contact@nuisitech.fr" className="text-primary hover:text-primary-light font-semibold break-all">
+                    contact@nuisitech.fr
                   </a>
                 </CardContent>
               </Card>

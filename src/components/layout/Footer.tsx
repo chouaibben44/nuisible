@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
-import footerlogo from "@/images/Éradication-nuisibles-logo-footer.webp";
+import footerlogo from "@/images/Nuisitech-logo-footer.webp";
 import cepa from "@/images/CEPA-logo.png";
 import agreecertibiocide from "@/images/agéécertibiocide.png";
 import haccp from "@/images/haccp.svg";
@@ -49,14 +49,14 @@ const Footer = () => {
           <div>
             <img
               src={footerlogo}
-              alt="Éradication Nuisibles — logo"
+              alt="Nuisitech — logo"
               className="mb-4 w-60 sm:w-60"
               style={{ height: "auto", display: "block" }}
               loading="lazy"
               decoding="async"
             />
             <p className="text-sm text-primary-foreground/80 mb-4">
-              Spécialiste du dépigeonnage et de la désinsectisation, Éradication Nuisibles intervient
+              Spécialiste du dépigeonnage et de la désinsectisation, Nuisitech intervient
               avec des procédés certifiés et respectueux de l’environnement. Votre tranquillité, notre
               priorité.
             </p>
@@ -153,10 +153,10 @@ const Footer = () => {
                 <div>
                   <p className="text-sm text-primary-foreground/80">Email</p>
                   <a
-                    href="mailto:contact@eradication-nuisibles.fr"
+                    href="mailto:contact@nuisitech.fr"
                     className="text-sm font-medium hover:text-accent transition-colors"
                   >
-                    contact@eradication-nuisibles.fr
+                    contact@nuisitech.fr
                   </a>
                 </div>
               </li>
@@ -168,7 +168,7 @@ const Footer = () => {
         <div className="border-t border-primary-foreground/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-primary-foreground/70">
-              © 2025 Éradication Nuisibles. Tous droits réservés.
+              © 2025 Nuisitech. Tous droits réservés.
             </p>
             <div className="flex gap-4">
               <Link

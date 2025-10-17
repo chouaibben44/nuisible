@@ -180,11 +180,11 @@ const Devis = () => {
                         <div className="font-semibold">06 98 66 93 78</div>
                       </div>
                     </a>
-                    <a href="mailto:contact@eradication-nuisibles.fr" className="flex items-center gap-3 hover:text-accent transition-colors">
+                    <a href="mailto:contact@nuisitech.fr" className="flex items-center gap-3 hover:text-accent transition-colors">
                       <Mail className="h-5 w-5" />
                       <div>
                         <div className="text-sm opacity-80">Email</div>
-                        <div className="font-semibold">contact@eradication-nuisibles.fr</div>
+                        <div className="font-semibold">contact@nuisitech.fr</div>
                       </div>
                     </a>
                     <div className="flex items-center gap-3">

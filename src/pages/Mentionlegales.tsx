@@ -52,7 +52,7 @@ const Mentionlegales = () => {
             <h2 className="text-xl md:text-2xl font-heading font-semibold mb-3">Contact</h2>
             <div className="text-sm leading-6">
               <p><span className="font-semibold">Téléphone:</span> <a className="text-primary hover:underline" href="tel:+33698669378">06 98 66 93 78</a></p>
-              <p><span className="font-semibold">Email:</span> <a className="text-primary hover:underline break-all" href="mailto:contact@eradication-nuisibles.fr">contact@eradication-nuisibles.fr</a></p>
+              <p><span className="font-semibold">Email:</span> <a className="text-primary hover:underline break-all" href="mailto:contact@nuisitech.fr">contact@nuisitech.fr</a></p>
             </div>
           </section>
 
@@ -116,8 +116,8 @@ const Mentionlegales = () => {
                 Les données sont conservées pour la durée nécessaire au traitement puis archivées
                 selon les obligations légales. Vous disposez de droits d’accès, rectification,
                 effacement, limitation et opposition. Pour les exercer, écrivez à{" "}
-                <a href="mailto:contact@eradication-nuisibles.fr" className="text-primary hover:underline break-all">
-                  contact@eradication-nuisibles.fr
+                <a href="mailto:contact@nuisitech.fr" className="text-primary hover:underline break-all">
+                  contact@nuisitech.fr
                 </a>.
               </p>
             </div>

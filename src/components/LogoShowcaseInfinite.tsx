@@ -21,25 +21,34 @@ const LOGOS = [
 
 export default function LogoShowcaseSolid() {
   const seqRef = useRef<HTMLDivElement | null>(null);
+  const spacerRef = useRef<HTMLDivElement | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!seqRef.current || !trackRef.current) return;
 
     const setVars = () => {
-      const distance = seqRef.current!.offsetWidth;
-      // Slower speed (was 90). 70 = slightly slower motion.
-      const SPEED = 40; // px per second
+      // distance = width of sequence A + spacer width
+      const seqW = seqRef.current!.offsetWidth;
+      const spacerW = spacerRef.current?.offsetWidth ?? getGapFromCSS(trackRef.current!);
+      const distance = Math.round(seqW + spacerW); // round to full pixels
+
+      // Adjust speed here (px per second)
+      const SPEED = 40;
       const duration = distance / SPEED;
 
       trackRef.current!.style.setProperty("--loop-distance", `${distance}px`);
       trackRef.current!.style.setProperty("--duration", `${duration}s`);
+      trackRef.current!.classList.add("is-ready");
     };
 
     setVars();
+
     const ro = new ResizeObserver(setVars);
-    ro.observe(seqRef.current!);
+    ro.observe(seqRef.current);
+    if (spacerRef.current) ro.observe(spacerRef.current);
     window.addEventListener("resize", setVars);
+
     return () => {
       ro.disconnect();
       window.removeEventListener("resize", setVars);
@@ -60,7 +69,7 @@ export default function LogoShowcaseSolid() {
               </div>
 
               {/* Spacer to keep the same gap at the seam */}
-              <div className="inter-sequence-spacer" aria-hidden="true" />
+              <div ref={spacerRef} className="inter-sequence-spacer" aria-hidden="true" />
 
               {/* Sequence B — exact duplicate */}
               <div className="sequence" aria-hidden="true">
@@ -88,9 +97,11 @@ export default function LogoShowcaseSolid() {
           align-items: center;
           width: max-content;
           will-change: transform;
-          animation: scroll var(--duration, 30s) linear infinite;
           transform: translate3d(0,0,0);
+          animation: scroll var(--duration, 30s) linear infinite;
         }
+        /* avoid flash before variables are set */
+        .ticker:not(.is-ready){ animation: none; }
 
         .sequence{
           display: inline-flex;
@@ -98,7 +109,6 @@ export default function LogoShowcaseSolid() {
           gap: var(--gap);
         }
 
-        /* This spacer ensures the SAME gap between the end of A and start of B */
         .inter-sequence-spacer{
           width: var(--gap);
           flex: 0 0 var(--gap);
@@ -117,13 +127,29 @@ export default function LogoShowcaseSolid() {
   );
 }
 
+// Helper to resolve the --gap var when spacer element isn't mounted yet
+function getGapFromCSS(el: HTMLElement){
+  const root = getComputedStyle(document.documentElement);
+  const gapVar = root.getPropertyValue("--gap").trim() || "36px";
+  // parse to px number
+  const px = parseFloat(gapVar);
+  if (!Number.isNaN(px)) return px;
+  // fallback to computed margin of a temp element
+  const tmp = document.createElement("div");
+  tmp.style.width = "var(--gap)";
+  el.appendChild(tmp);
+  const w = tmp.getBoundingClientRect().width;
+  el.removeChild(tmp);
+  return Math.round(w);
+}
+
 function LogoBox({ src, alt }: { src: string; alt: string }) {
   return (
     <div
       className="flex items-center justify-center"
       style={{
         height: "var(--logo-h)",
-        width: "140px",   // equal footprint for each logo
+        width: "140px",
         flex: "0 0 auto",
       }}
     >
@@ -131,7 +157,13 @@ function LogoBox({ src, alt }: { src: string; alt: string }) {
         src={src}
         alt={alt}
         loading="lazy"
-        style={{ maxHeight: "100%", width: "100%", objectFit: "contain", display: "block", margin: 0 }}
+        style={{
+          maxHeight: "100%",
+          width: "100%",
+          objectFit: "contain",
+          display: "block",
+          margin: 0,
+        }}
         className="opacity-85 saturate-0 contrast-125 transition hover:opacity-100 hover:saturate-100"
       />
     </div>
