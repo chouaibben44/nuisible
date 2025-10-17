@@ -3,6 +3,7 @@ import ServicesSection from '@/components/home/ServicesSection';
 import WhyChooseSection from '@/components/home/WhyChooseSection';
 import TestimonialsSection from '@/components/home/TestimonialsSection';
 import NuisibleShowcase from '@/components/NuisibleShowcase';
+import LogoShowcaseInfinite from '@/components/LogoShowcaseInfinite';
 
 
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
       <ServicesSection />
       <WhyChooseSection />
       <NuisibleShowcase />
+      <LogoShowcaseInfinite />
       <TestimonialsSection />
     </div>
   );
