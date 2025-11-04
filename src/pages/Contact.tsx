@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +33,9 @@ const Contact = () => {
     setFormData((p) => ({ ...p, phone: digits }));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     if (name === "phone") return handlePhoneChange(value);
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -38,10 +46,17 @@ const Contact = () => {
 
     // Basic guards
     if (!/^0\d{9}$/.test(formData.phone)) {
-      toast.error("Le numéro doit contenir 10 chiffres et commencer par 0 (ex: 0612345678).");
+      toast.error(
+        "Le numéro doit contenir 10 chiffres et commencer par 0 (ex: 0612345678)."
+      );
       return;
     }
-    if (!formData.name || !formData.email || !formData.city || !formData.message) {
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.city ||
+      !formData.message
+    ) {
       toast.error("Merci de remplir tous les champs obligatoires.");
       return;
     }
@@ -73,7 +88,9 @@ const Contact = () => {
       if (error) throw error;
 
       if (data?.ok) {
-        toast.success("Message envoyé avec succès ! Nous vous recontacterons rapidement.");
+        toast.success(
+          "Message envoyé avec succès ! Nous vous recontacterons rapidement."
+        );
         setFormData({
           name: "",
           email: "",
@@ -87,7 +104,9 @@ const Contact = () => {
         toast.error("Réponse inattendue du serveur.");
       }
     } catch (err: any) {
-      toast.error(err?.message || "Échec de l’envoi. Réessayez dans un instant.");
+      toast.error(
+        err?.message || "Échec de l’envoi. Réessayez dans un instant."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -96,7 +115,7 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact – Parlez à un expert | Nuisitech</title>
+        <title>Contact – Parlez à un expert | Nuisicontrol</title>
         <meta
           name="description"
           content="Des questions sur nos services de dépigeonnage ou désinsectisation ? Contactez-nous : formulaire, email ou téléphone. Réponse sous 24 h."
@@ -108,9 +127,12 @@ const Contact = () => {
         <section className="bg-gradient-primary py-8 text-primary-foreground">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center animate-fade-in">
-              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Contactez-nous</h1>
+              <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">
+                Contactez-nous
+              </h1>
               <p className="text-lg text-primary-foreground/90">
-                Notre équipe est à votre disposition pour répondre à toutes vos questions
+                Notre équipe est à votre disposition pour répondre à toutes vos
+                questions
               </p>
             </div>
           </div>
@@ -125,37 +147,59 @@ const Contact = () => {
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
                     <Phone className="h-8 w-8" />
                   </div>
-                  <h3 className="text-lg font-heading font-semibold mb-2">Téléphone</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Disponible 24h/24 - 7j/7</p>
-                  <a href="tel:+33698669378" className="text-primary hover:text-primary-light font-semibold">
+                  <h3 className="text-lg font-heading font-semibold mb-2">
+                    Téléphone
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Disponible 24h/24 - 7j/7
+                  </p>
+                  <a
+                    href="tel:+33698669378"
+                    className="text-primary hover:text-primary-light font-semibold"
+                  >
                     06 98 66 93 78
                   </a>
                 </CardContent>
               </Card>
 
-              <Card className="text-center hover:shadow-soft transition-shadow animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+              <Card
+                className="text-center hover:shadow-soft transition-shadow animate-fade-in-up"
+                style={{ animationDelay: "100ms" }}
+              >
                 <CardContent className="pt-8">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
                     <Mail className="h-8 w-8" />
                   </div>
-                  <h3 className="text-lg font-heading font-semibold mb-2">Email</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Réponse sous 24h</p>
-                  <a href="mailto:contact@nuisitech.fr" className="text-primary hover:text-primary-light font-semibold break-all">
-                    contact@nuisitech.fr
+                  <h3 className="text-lg font-heading font-semibold mb-2">
+                    Email
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Réponse sous 24h
+                  </p>
+                  <a
+                    href="mailto:contact@nuisicontrol.fr"
+                    className="text-primary hover:text-primary-light font-semibold break-all"
+                  >
+                    contact@nuisicontrol.fr
                   </a>
                 </CardContent>
               </Card>
 
-              <Card className="text-center hover:shadow-soft transition-shadow animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+              <Card
+                className="text-center hover:shadow-soft transition-shadow animate-fade-in-up"
+                style={{ animationDelay: "200ms" }}
+              >
                 <CardContent className="pt-8">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
                     <MapPin className="h-8 w-8" />
                   </div>
-                  <h3 className="text-lg font-heading font-semibold mb-2">Adresse</h3>
-                  <p className="text-sm text-muted-foreground mb-2">Siège social</p>
-                  <p className="text-primary font-semibold">
-                    Marseille
+                  <h3 className="text-lg font-heading font-semibold mb-2">
+                    Adresse
+                  </h3>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Siège social
                   </p>
+                  <p className="text-primary font-semibold">Marseille</p>
                 </CardContent>
               </Card>
             </div>
@@ -173,24 +217,34 @@ const Contact = () => {
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Lundi - Vendredi</span>
+                      <span className="text-muted-foreground">
+                        Lundi - Vendredi
+                      </span>
                       <span className="font-semibold">8h00 - 19h00</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Samedi - Dimanche</span>
+                      <span className="text-muted-foreground">
+                        Samedi - Dimanche
+                      </span>
                       <span className="font-semibold">9h00 - 17h00</span>
                     </div>
                     <div className="pt-4 mt-4 border-t">
-                      <p className="text-sm text-accent font-semibold">Service d'urgence 24h/24 - 7j/7 disponible</p>
+                      <p className="text-sm text-accent font-semibold">
+                        Service d'urgence 24h/24 - 7j/7 disponible
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
 
                 <Card className="bg-gradient-accent text-primary-foreground">
                   <CardContent className="pt-6">
-                    <h3 className="text-xl font-heading font-bold mb-4">Interventions rapides</h3>
+                    <h3 className="text-xl font-heading font-bold mb-4">
+                      Interventions rapides
+                    </h3>
                     <p className="mb-4 text-primary-foreground/90">
-                      Nous intervenons dans toute la région Île-de-France et garantissons une présence sur site sous 4 heures pour les urgences.
+                      Nous intervenons dans toute la région Île-de-France et
+                      garantissons une présence sur site sous 4 heures pour les
+                      urgences.
                     </p>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start gap-2">
@@ -213,9 +267,12 @@ const Contact = () => {
               {/* Contact form on the right */}
               <Card className="animate-fade-in md:order-2">
                 <CardHeader>
-                  <CardTitle className="text-2xl font-heading">Envoyez-nous un message</CardTitle>
+                  <CardTitle className="text-2xl font-heading">
+                    Envoyez-nous un message
+                  </CardTitle>
                   <CardDescription>
-                    Remplissez le formulaire ci-dessous et nous vous répondrons dans les plus brefs délais
+                    Remplissez le formulaire ci-dessous et nous vous répondrons
+                    dans les plus brefs délais
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -309,12 +366,20 @@ const Contact = () => {
                       />
                     </div>
 
-                    <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-                      {isSubmitting ? "Envoi en cours..." : "Envoyer la demande"}
+                    <Button
+                      type="submit"
+                      size="lg"
+                      className="w-full"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting
+                        ? "Envoi en cours..."
+                        : "Envoyer la demande"}
                     </Button>
 
                     <p className="text-xs text-muted-foreground text-center">
-                      * Champs obligatoires. Vos données sont traitées de manière confidentielle.
+                      * Champs obligatoires. Vos données sont traitées de
+                      manière confidentielle.
                     </p>
                   </form>
                 </CardContent>

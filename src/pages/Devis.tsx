@@ -11,7 +11,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 import {
   Form,
@@ -19,7 +19,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { Phone, Mail, MapPin, Clock, CheckCircle } from "lucide-react";
@@ -27,15 +27,28 @@ import { supabase } from "@/lib/supabaseClient";
 
 // ----- Validation (Zod) -----
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
+  name: z
+    .string()
+    .min(2, { message: "Le nom doit contenir au moins 2 caractères" }),
   // French mobile/landline: 10 digits starting with 0 (e.g., 0612345678)
   phone: z
     .string()
-    .regex(/^0\d{9}$/, { message: "Téléphone au format 10 chiffres, commençant par 0 (ex: 0612345678)" }),
-  email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
-  city: z.string().min(2, { message: "La ville doit contenir au moins 2 caractères" }),
-  nuisibleType: z.string().min(1, { message: "Veuillez sélectionner un type de nuisible" }),
-  message: z.string().min(10, { message: "Le message doit contenir au moins 10 caractères" }),
+    .regex(/^0\d{9}$/, {
+      message:
+        "Téléphone au format 10 chiffres, commençant par 0 (ex: 0612345678)",
+    }),
+  email: z
+    .string()
+    .email({ message: "Veuillez entrer une adresse email valide" }),
+  city: z
+    .string()
+    .min(2, { message: "La ville doit contenir au moins 2 caractères" }),
+  nuisibleType: z
+    .string()
+    .min(1, { message: "Veuillez sélectionner un type de nuisible" }),
+  message: z
+    .string()
+    .min(10, { message: "Le message doit contenir au moins 10 caractères" }),
   hp: z.string().optional(), // honeypot
 });
 
@@ -80,7 +93,7 @@ const Devis = () => {
       const { data, error } = await supabase.functions.invoke("submit-quote", {
         body: payload,
         method: "POST",
-        headers: { "x-page-path": window.location.pathname }
+        headers: { "x-page-path": window.location.pathname },
       });
 
       if (error) throw error;
@@ -121,7 +134,8 @@ const Devis = () => {
               Demander un devis gratuit
             </h1>
             <p className="text-sm sm:text-xl max-w-xl sm:max-w-2xl mx-auto opacity-90">
-              Recevez un devis gratuit et rapide de nos experts certifiés. Intervention sous 24h partout en France.
+              Recevez un devis gratuit et rapide de nos experts certifiés.
+              Intervention sous 24h partout en France.
             </p>
           </div>
         </section>
@@ -140,29 +154,45 @@ const Devis = () => {
                     <li className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
                       <div>
-                        <div className="font-semibold mb-1">Intervention rapide</div>
-                        <div className="text-sm text-muted-foreground">Nous intervenons sous 24h partout en France</div>
+                        <div className="font-semibold mb-1">
+                          Intervention rapide
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Nous intervenons sous 24h partout en France
+                        </div>
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
                       <div>
-                        <div className="font-semibold mb-1">Devis gratuit et sans engagement</div>
-                        <div className="text-sm text-muted-foreground">Estimation précise de votre projet</div>
+                        <div className="font-semibold mb-1">
+                          Devis gratuit et sans engagement
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Estimation précise de votre projet
+                        </div>
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
                       <div>
-                        <div className="font-semibold mb-1">Experts certifiés</div>
-                        <div className="text-sm text-muted-foreground">Techniciens formés et agréés</div>
+                        <div className="font-semibold mb-1">
+                          Experts certifiés
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Techniciens formés et agréés
+                        </div>
                       </div>
                     </li>
                     <li className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-accent flex-shrink-0 mt-1" />
                       <div>
-                        <div className="font-semibold mb-1">Garantie de résultats</div>
-                        <div className="text-sm text-muted-foreground">Solutions durables et efficaces</div>
+                        <div className="font-semibold mb-1">
+                          Garantie de résultats
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Solutions durables et efficaces
+                        </div>
                       </div>
                     </li>
                   </ul>
@@ -173,18 +203,26 @@ const Devis = () => {
                     Besoin d'une réponse immédiate ?
                   </h3>
                   <div className="space-y-4">
-                    <a href="tel:+33698669378" className="flex items-center gap-3 hover:text-accent transition-colors">
+                    <a
+                      href="tel:+33698669378"
+                      className="flex items-center gap-3 hover:text-accent transition-colors"
+                    >
                       <Phone className="h-5 w-5" />
                       <div>
                         <div className="text-sm opacity-80">Appelez-nous</div>
                         <div className="font-semibold">06 98 66 93 78</div>
                       </div>
                     </a>
-                    <a href="mailto:contact@nuisitech.fr" className="flex items-center gap-3 hover:text-accent transition-colors">
+                    <a
+                      href="mailto:contact@nuisicontrol.fr"
+                      className="flex items-center gap-3 hover:text-accent transition-colors"
+                    >
                       <Mail className="h-5 w-5" />
                       <div>
                         <div className="text-sm opacity-80">Email</div>
-                        <div className="font-semibold">contact@nuisitech.fr</div>
+                        <div className="font-semibold">
+                          contact@nuisicontrol.fr
+                        </div>
                       </div>
                     </a>
                     <div className="flex items-center gap-3">
@@ -197,7 +235,9 @@ const Devis = () => {
                     <div className="flex items-center gap-3">
                       <MapPin className="h-5 w-5" />
                       <div>
-                        <div className="text-sm opacity-80">Zone d'intervention</div>
+                        <div className="text-sm opacity-80">
+                          Zone d'intervention
+                        </div>
                         <div className="font-semibold">Toute la France</div>
                       </div>
                     </div>
@@ -212,9 +252,18 @@ const Devis = () => {
                 </h2>
 
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-6"
+                  >
                     {/* Honeypot (hidden) */}
-                    <input type="text" {...form.register("hp")} className="hidden" tabIndex={-1} autoComplete="off" />
+                    <input
+                      type="text"
+                      {...form.register("hp")}
+                      className="hidden"
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
 
                     <FormField
                       control={form.control}
@@ -242,7 +291,9 @@ const Devis = () => {
                               inputMode="numeric"
                               maxLength={10}
                               value={field.value}
-                              onChange={(e) => handlePhoneChange(e.target.value)}
+                              onChange={(e) =>
+                                handlePhoneChange(e.target.value)
+                              }
                               autoComplete="tel"
                             />
                           </FormControl>
@@ -258,7 +309,11 @@ const Devis = () => {
                         <FormItem>
                           <FormLabel>Email *</FormLabel>
                           <FormControl>
-                            <Input type="email" placeholder="votre@email.fr" {...field} />
+                            <Input
+                              type="email"
+                              placeholder="votre@email.fr"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -286,7 +341,10 @@ const Devis = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Type de nuisible *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Sélectionnez un nuisible" />
@@ -294,17 +352,29 @@ const Devis = () => {
                             </FormControl>
                             <SelectContent>
                               <SelectItem value="pigeons">Pigeons</SelectItem>
-                              <SelectItem value="moustiques">Moustiques</SelectItem>
+                              <SelectItem value="moustiques">
+                                Moustiques
+                              </SelectItem>
                               <SelectItem value="termites">Termites</SelectItem>
 
                               {/* --- New services --- */}
-                              <SelectItem value="chenille-processionnaire">Chenille processionnaire</SelectItem>
+                              <SelectItem value="chenille-processionnaire">
+                                Chenille processionnaire
+                              </SelectItem>
                               <SelectItem value="taupe">Taupe</SelectItem>
-                              <SelectItem value="demoussage">Démoussage</SelectItem>
-                              <SelectItem value="xylophages">Xylophages</SelectItem>
-                              <SelectItem value="poudrage-toiture-express">Poudrage toiture express (guêpes)</SelectItem>
+                              <SelectItem value="demoussage">
+                                Démoussage
+                              </SelectItem>
+                              <SelectItem value="xylophages">
+                                Xylophages
+                              </SelectItem>
+                              <SelectItem value="poudrage-toiture-express">
+                                Poudrage toiture express (guêpes)
+                              </SelectItem>
 
-                              <SelectItem value="autre">Autre nuisible</SelectItem>
+                              <SelectItem value="autre">
+                                Autre nuisible
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />

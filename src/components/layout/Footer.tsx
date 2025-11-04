@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail } from "lucide-react";
-import footerlogo from "@/images/Nuisitech-logo-footer.webp";
+import footerlogo from "@/images/nuisicontrol-logo-footer.svg";
 import cepa from "@/images/CEPA-logo.png";
 import agreecertibiocide from "@/images/agéécertibiocide.png";
 import haccp from "@/images/haccp.svg";
@@ -10,38 +10,37 @@ const Footer = () => {
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
         {/* Top: Certifications strip (always in a single row) */}
-<div className="mb-20">
-  <div className="grid grid-flow-col auto-cols-max items-center justify-around md:justify-center gap-4 md:gap-8">
-    <div className="h-8 md:h-12 flex items-center">
-      <img
-        src={cepa}
-        alt="Certification CEPA"
-        className="h-full w-auto object-contain"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-    <div className="h-8 md:h-12 flex items-center">
-      <img
-        src={agreecertibiocide}
-        alt="Agrément Certibiocide"
-        className="h-full w-auto object-contain"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-    <div className="h-8 md:h-12 flex items-center">
-      <img
-        src={haccp}
-        alt="Certification HACCP"
-        className="h-full w-auto object-contain"
-        loading="lazy"
-        decoding="async"
-      />
-    </div>
-  </div>
-</div>
-
+        <div className="mb-20">
+          <div className="grid grid-flow-col auto-cols-max items-center justify-around md:justify-center gap-4 md:gap-8">
+            <div className="h-8 md:h-12 flex items-center">
+              <img
+                src={cepa}
+                alt="Certification CEPA"
+                className="h-full w-auto object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className="h-8 md:h-12 flex items-center">
+              <img
+                src={agreecertibiocide}
+                alt="Agrément Certibiocide"
+                className="h-full w-auto object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div className="h-8 md:h-12 flex items-center">
+              <img
+                src={haccp}
+                alt="Certification HACCP"
+                className="h-full w-auto object-contain"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Main footer grid */}
         <div className="grid pt-5 grid-cols-1 md:grid-cols-4 gap-8">
@@ -49,22 +48,24 @@ const Footer = () => {
           <div>
             <img
               src={footerlogo}
-              alt="Nuisitech — logo"
+              alt="Nuisicontrol — logo"
               className="mb-4 w-60 sm:w-60"
               style={{ height: "auto", display: "block" }}
               loading="lazy"
               decoding="async"
             />
             <p className="text-sm text-primary-foreground/80 mb-4">
-              Spécialiste du dépigeonnage et de la désinsectisation, Nuisitech intervient
-              avec des procédés certifiés et respectueux de l’environnement. Votre tranquillité, notre
-              priorité.
+              Spécialiste du dépigeonnage et de la désinsectisation,
+              Nuisicontrol intervient avec des procédés certifiés et respectueux
+              de l’environnement. Votre tranquillité, notre priorité.
             </p>
           </div>
 
           {/* Quick links */}
           <div>
-            <h3 className="text-lg font-heading font-semibold mb-4">Liens rapides</h3>
+            <h3 className="text-lg font-heading font-semibold mb-4">
+              Liens rapides
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -103,7 +104,9 @@ const Footer = () => {
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-heading font-semibold mb-4">Nos Services</h3>
+            <h3 className="text-lg font-heading font-semibold mb-4">
+              Nos Services
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -139,7 +142,9 @@ const Footer = () => {
               <li className="flex items-start gap-2">
                 <Phone className="h-5 w-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-primary-foreground/80">Appelez-nous</p>
+                  <p className="text-sm text-primary-foreground/80">
+                    Appelez-nous
+                  </p>
                   <a
                     href="tel:+33698669378"
                     className="text-sm font-medium hover:text-accent transition-colors"
@@ -153,10 +158,10 @@ const Footer = () => {
                 <div>
                   <p className="text-sm text-primary-foreground/80">Email</p>
                   <a
-                    href="mailto:contact@nuisitech.fr"
+                    href="mailto:contact@nuisicontrol.fr"
                     className="text-sm font-medium hover:text-accent transition-colors"
                   >
-                    contact@nuisitech.fr
+                    contact@nuisicontrol.fr
                   </a>
                 </div>
               </li>
@@ -168,7 +173,7 @@ const Footer = () => {
         <div className="border-t border-primary-foreground/20 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-primary-foreground/70">
-              © 2025 Nuisitech. Tous droits réservés.
+              © 2025 Nuisicontrol. Tous droits réservés.
             </p>
             <div className="flex gap-4">
               <Link

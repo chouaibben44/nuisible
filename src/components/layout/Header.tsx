@@ -15,7 +15,7 @@ import {
   Droplets,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import logo from "@/images/Nuisitech-logo.webp";
+import logo from "@/images/nuisicontrol-logo.svg";
 
 /** SVGs for desktop <img> usage */
 import waspIcon from "@/assets/wasp.svg";
@@ -114,13 +114,11 @@ const Header = () => {
             <span className="hidden sm:inline">06 98 66 93 78</span>
           </a>
           <a
-            href="mailto:contact@nuisitech.fr"
+            href="mailto:contact@nuisicontrol.fr"
             className="flex items-center gap-2 hover:text-accent transition-colors"
           >
             <Mail className="h-4 w-4" />
-            <span className="hidden sm:inline">
-              contact@nuisitech.fr
-            </span>
+            <span className="hidden sm:inline">contact@nuisicontrol.fr</span>
           </a>
         </div>
       </div>
@@ -132,14 +130,14 @@ const Header = () => {
           <Link
             to="/"
             className="flex items-center"
-            aria-label="Accueil Nuisitech"
+            aria-label="Accueil Nuisicontrol"
           >
             <img
               src={logo}
-              alt="Nuisitech"
+              alt="Nuisicontrol"
               width={180}
               height={44}
-              className="block h-auto w-[200px] md:w-[200px]"
+              className="block h-auto w-[220px] md:w-[220px]"
               loading="eager"
               decoding="async"
             />
