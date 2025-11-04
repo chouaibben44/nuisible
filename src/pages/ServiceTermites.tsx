@@ -124,7 +124,7 @@ const ServiceTermites = () => {
         <div className="container mx-auto px-4">
           <div className="grid gap-10 sm:gap-12 lg:grid-cols-3">
             {/* LEFT: content */}
-            <div className="lg:col-span-2 space-y-10 sm:space-y-12">
+            <div className="lg:col-span-2 space-y-10 sm:space-y-12 min-w-0">
               {/* Intro */}
               <div>
                 <h2 className="mb-3 sm:mb-4 text-2xl font-bold md:text-3xl">
@@ -308,6 +308,11 @@ const ServiceTermites = () => {
                 </div>
               </div>
 
+              {/* MOBILE-ONLY: carousel just below the section */}
+              <div className="mt-6 sm:hidden">
+                <GalleryCarousel />
+              </div>
+
               {/* Warning signs */}
               <div className="rounded-lg bg-muted p-6">
                 <h3 className="mb-4 text-xl font-bold">
@@ -389,7 +394,10 @@ const ServiceTermites = () => {
         </div>
       </section>
 
-      <GalleryCarousel />
+      {/* (Optional) Desktop/tablet only */}
+      <div className="hidden sm:block">
+        <GalleryCarousel />
+      </div>
 
       {/* FAQ */}
       <FAQSection items={termitesFAQ} />

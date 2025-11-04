@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, A11y } from "swiper/modules";
 import "swiper/css";
@@ -39,9 +39,9 @@ export default function GalleryCarousel() {
     []
   );
 
+  // Lightbox
   const [isOpen, setIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
-
   const open = (i: number) => {
     setIndex(i);
     setIsOpen(true);
@@ -66,13 +66,22 @@ export default function GalleryCarousel() {
     };
   }, [isOpen]);
 
+  // Swiper element refs (fixes missing pagination)
+  const prevRef = useRef<HTMLButtonElement | null>(null);
+  const nextRef = useRef<HTMLButtonElement | null>(null);
+  const pagRef = useRef<HTMLDivElement | null>(null);
+
   return (
     <section className="gc-root">
       <div className="container mx-auto px-4">
         <div className="gc-wrap">
-          {/* Track keeps arrows centered vertically; overflow visible allows half-outside placement */}
           <div className="gc-track">
-            <button className="gc-arrow gc-prev" aria-label="Précédent">
+            {/* external arrows (half outside) */}
+            <button
+              ref={prevRef}
+              className="gc-arrow gc-prev"
+              aria-label="Précédent"
+            >
               <svg
                 viewBox="0 0 24 24"
                 width="18"
@@ -94,18 +103,35 @@ export default function GalleryCarousel() {
               spaceBetween={12}
               slidesPerView={1}
               slidesPerGroup={1}
-              navigation={{ prevEl: ".gc-prev", nextEl: ".gc-next" }}
-              pagination={{
-                el: ".gc-pagination",
-                clickable: true,
-                renderBullet: (_i, className) =>
-                  `<span class="gc-bullet ${className}"></span>`,
-              }}
               breakpoints={{
                 0: { slidesPerView: 1 },
                 1024: { slidesPerView: 3 },
               }}
               aria-label="Galerie d’images"
+              onBeforeInit={(swiper) => {
+                // wire refs before init
+                // @ts-expect-error: Swiper types are permissive here
+                swiper.params.navigation.prevEl = prevRef.current;
+                // @ts-expect-error
+                swiper.params.navigation.nextEl = nextRef.current;
+                // @ts-expect-error
+                swiper.params.pagination.el = pagRef.current;
+              }}
+              onSwiper={(swiper) => {
+                // ensure they’re picked up in React strict/double render
+                setTimeout(() => {
+                  swiper.navigation.init();
+                  swiper.navigation.update();
+                  swiper.pagination.init();
+                  swiper.pagination.update();
+                }, 0);
+              }}
+              navigation // enabled via refs above
+              pagination={{
+                clickable: true,
+                renderBullet: (_i, className) =>
+                  `<span class="gc-bullet ${className}"></span>`,
+              }}
             >
               {slides.map((s, i) => (
                 <SwiperSlide key={i}>
@@ -125,7 +151,11 @@ export default function GalleryCarousel() {
               ))}
             </Swiper>
 
-            <button className="gc-arrow gc-next" aria-label="Suivant">
+            <button
+              ref={nextRef}
+              className="gc-arrow gc-next"
+              aria-label="Suivant"
+            >
               <svg
                 viewBox="0 0 24 24"
                 width="18"
@@ -143,11 +173,12 @@ export default function GalleryCarousel() {
             </button>
           </div>
 
-          {/* Pagination BELOW; margin won't move arrows */}
-          <div className="gc-pagination"></div>
+          {/* Pagination BELOW the track */}
+          <div ref={pagRef} className="gc-pagination" />
         </div>
       </div>
 
+      {/* Lightbox */}
       {isOpen && (
         <div
           className="gc-lightbox"
@@ -157,24 +188,33 @@ export default function GalleryCarousel() {
           aria-label="Agrandissement d’image"
         >
           <div className="gc-lb-topbar" onClick={(e) => e.stopPropagation()}>
-            <span className="gc-lb-count">
-              {index + 1} / {slides.length}
-            </span>
-            <button className="gc-lb-close" onClick={close} aria-label="Fermer">
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                aria-hidden="true"
+            <div className="gc-lb-title" title={slides[index].caption}>
+              <strong>{slides[index].caption}</strong>
+            </div>
+            <div className="gc-lb-right">
+              <span className="gc-lb-count">
+                {index + 1} / {slides.length}
+              </span>
+              <button
+                className="gc-lb-close"
+                onClick={close}
+                aria-label="Fermer"
               >
-                <path
-                  d="M6 6l12 12M18 6l-12 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6 6l12 12M18 6l-12 12"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
 
           <div className="gc-lb-stage" onClick={(e) => e.stopPropagation()}>
@@ -191,10 +231,10 @@ export default function GalleryCarousel() {
               >
                 <path
                   d="M15 6l-6 6 6 6"
+                  fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
-                  fill="none"
                 />
               </svg>
             </button>
@@ -218,10 +258,10 @@ export default function GalleryCarousel() {
               >
                 <path
                   d="M9 6l6 6-6 6"
+                  fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
-                  fill="none"
                 />
               </svg>
             </button>
