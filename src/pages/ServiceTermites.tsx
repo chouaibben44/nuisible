@@ -119,6 +119,11 @@ const ServiceTermites = () => {
         </div>
       </div>
 
+      {/* MOBILE-ONLY: carousel just below the section */}
+              <div className="mt-6 sm:hidden">
+                <GalleryCarousel />
+              </div>
+
       {/* MAIN CONTENT */}
       <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4">
@@ -306,11 +311,6 @@ const ServiceTermites = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-
-              {/* MOBILE-ONLY: carousel just below the section */}
-              <div className="mt-6 sm:hidden">
-                <GalleryCarousel />
               </div>
 
               {/* Warning signs */}
