@@ -6,6 +6,13 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./GalleryCarousel.css";
 
+/**
+ * Robust asset resolution for Vite/Netlify:
+ * - import.meta.glob eagerly imports and returns URLs that survive production bundling
+ * - Keys must match your actual file names under /src/images (case-sensitive)
+ */
+const imageModules = import.meta.glob("/src/images/*", { eager: true, as: "url" });
+
 const fileNames = [
   "Injection de traitement anti-termites dans la charpente.webp",
   "Inspection de charpente pour détection de termites.webp",
@@ -28,20 +35,26 @@ const alts = [
   "Traitement préventif anti-termites sur façade bois",
 ];
 
-export default function GalleryCarousel() {
-  const slides = useMemo(
-    () =>
-      fileNames.map((name, i) => ({
-        src: new URL(`/src/images/${name}`, import.meta.url).toString(),
-        alt: alts[i],
-        caption: alts[i],
-      })),
-    []
-  );
+type Slide = { src: string; alt: string; caption: string };
 
-  // Lightbox
+export default function GalleryCarousel() {
+  // Resolve each filename to a bundled URL via the glob map
+  const slides: Slide[] = useMemo(() => {
+    return fileNames
+      .map((name, i) => {
+        // Find the module key in the glob result that ends with our file name
+        const entry = Object.entries(imageModules).find(([key]) => key.endsWith(name));
+        const src = entry?.[1] as string | undefined;
+        if (!src) return null;
+        const alt = alts[i] ?? name.replace(/\.webp$/i, "");
+        return { src, alt, caption: alt };
+      })
+      .filter((x): x is Slide => Boolean(x));
+  }, []);
+
   const [isOpen, setIsOpen] = useState(false);
   const [index, setIndex] = useState(0);
+
   const open = (i: number) => {
     setIndex(i);
     setIsOpen(true);
@@ -66,9 +79,7 @@ export default function GalleryCarousel() {
     };
   }, [isOpen]);
 
-  // Swiper element refs (fixes missing pagination)
-  const prevRef = useRef<HTMLButtonElement | null>(null);
-  const nextRef = useRef<HTMLButtonElement | null>(null);
+  // Robust pagination binding: use a ref + onBeforeInit
   const pagRef = useRef<HTMLDivElement | null>(null);
 
   return (
@@ -76,18 +87,9 @@ export default function GalleryCarousel() {
       <div className="container mx-auto px-4">
         <div className="gc-wrap">
           <div className="gc-track">
-            {/* external arrows (half outside) */}
-            <button
-              ref={prevRef}
-              className="gc-arrow gc-prev"
-              aria-label="Précédent"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                aria-hidden="true"
-              >
+            {/* External arrows (half in / half out, all breakpoints) */}
+            <button className="gc-arrow gc-prev" aria-label="Précédent">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                 <path
                   d="M15 6l-6 6 6 6"
                   fill="none"
@@ -103,35 +105,25 @@ export default function GalleryCarousel() {
               spaceBetween={12}
               slidesPerView={1}
               slidesPerGroup={1}
+              navigation={{ prevEl: ".gc-prev", nextEl: ".gc-next" }}
+              pagination={{
+                el: pagRef.current,
+                clickable: true,
+                renderBullet: (_i, className) =>
+                  `<span class="gc-bullet ${className}"></span>`,
+              }}
+              onBeforeInit={(swiper) => {
+                // Ensure Swiper attaches to the real element in both dev and prod
+                if (pagRef.current) {
+                  // @ts-expect-error - Swiper's typing is permissive at runtime
+                  swiper.params.pagination.el = pagRef.current;
+                }
+              }}
               breakpoints={{
                 0: { slidesPerView: 1 },
                 1024: { slidesPerView: 3 },
               }}
               aria-label="Galerie d’images"
-              onBeforeInit={(swiper) => {
-                // wire refs before init
-                // @ts-expect-error: Swiper types are permissive here
-                swiper.params.navigation.prevEl = prevRef.current;
-                // @ts-expect-error
-                swiper.params.navigation.nextEl = nextRef.current;
-                // @ts-expect-error
-                swiper.params.pagination.el = pagRef.current;
-              }}
-              onSwiper={(swiper) => {
-                // ensure they’re picked up in React strict/double render
-                setTimeout(() => {
-                  swiper.navigation.init();
-                  swiper.navigation.update();
-                  swiper.pagination.init();
-                  swiper.pagination.update();
-                }, 0);
-              }}
-              navigation // enabled via refs above
-              pagination={{
-                clickable: true,
-                renderBullet: (_i, className) =>
-                  `<span class="gc-bullet ${className}"></span>`,
-              }}
             >
               {slides.map((s, i) => (
                 <SwiperSlide key={i}>
@@ -140,28 +132,14 @@ export default function GalleryCarousel() {
                     onClick={() => open(i)}
                     aria-label={`Ouvrir l’image : ${s.alt}`}
                   >
-                    <img
-                      className="gc-image"
-                      src={s.src}
-                      alt={s.alt}
-                      loading="lazy"
-                    />
+                    <img className="gc-image" src={s.src} alt={s.alt} loading="lazy" />
                   </button>
                 </SwiperSlide>
               ))}
             </Swiper>
 
-            <button
-              ref={nextRef}
-              className="gc-arrow gc-next"
-              aria-label="Suivant"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                aria-hidden="true"
-              >
+            <button className="gc-arrow gc-next" aria-label="Suivant">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
                 <path
                   d="M9 6l6 6-6 6"
                   fill="none"
@@ -173,8 +151,8 @@ export default function GalleryCarousel() {
             </button>
           </div>
 
-          {/* Pagination BELOW the track */}
-          <div ref={pagRef} className="gc-pagination" />
+          {/* Pagination BELOW — ref used for reliable binding */}
+          <div className="gc-pagination" ref={pagRef} />
         </div>
       </div>
 
@@ -188,53 +166,30 @@ export default function GalleryCarousel() {
           aria-label="Agrandissement d’image"
         >
           <div className="gc-lb-topbar" onClick={(e) => e.stopPropagation()}>
-            <div className="gc-lb-title" title={slides[index].caption}>
-              <strong>{slides[index].caption}</strong>
-            </div>
-            <div className="gc-lb-right">
-              <span className="gc-lb-count">
-                {index + 1} / {slides.length}
-              </span>
-              <button
-                className="gc-lb-close"
-                onClick={close}
-                aria-label="Fermer"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="20"
-                  height="20"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M6 6l12 12M18 6l-12 12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <div className="gc-lb-stage" onClick={(e) => e.stopPropagation()}>
-            <button
-              className="gc-lb-nav gc-lb-prev"
-              onClick={prev}
-              aria-label="Image précédente"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                aria-hidden="true"
-              >
+            <span className="gc-lb-count">
+              {index + 1} / {slides.length}
+            </span>
+            <button className="gc-lb-close" onClick={close} aria-label="Fermer">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                 <path
-                  d="M15 6l-6 6 6 6"
-                  fill="none"
+                  d="M6 6l12 12M18 6l-12 12"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div className="gc-lb-stage" onClick={(e) => e.stopPropagation()}>
+            <button className="gc-lb-nav gc-lb-prev" onClick={prev} aria-label="Image précédente">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <path
+                  d="M15 6l-6 6 6 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
                 />
               </svg>
             </button>
@@ -245,31 +200,20 @@ export default function GalleryCarousel() {
               alt={slides[index].alt}
             />
 
-            <button
-              className="gc-lb-nav gc-lb-next"
-              onClick={next}
-              aria-label="Image suivante"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                aria-hidden="true"
-              >
+            <button className="gc-lb-nav gc-lb-next" onClick={next} aria-label="Image suivante">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
                 <path
                   d="M9 6l6 6-6 6"
-                  fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
                   strokeLinecap="round"
+                  fill="none"
                 />
               </svg>
             </button>
           </div>
 
-          <figcaption className="gc-lb-caption">
-            {slides[index].caption}
-          </figcaption>
+          <figcaption className="gc-lb-caption">{slides[index].caption}</figcaption>
         </div>
       )}
     </section>
