@@ -84,7 +84,6 @@
   -webkit-backdrop-filter: blur(6px) saturate(1.1);
   backdrop-filter: blur(6px) saturate(1.1);
   display: grid; grid-template-rows: auto 1fr auto;
-  /* Use dynamic viewport height when supported to avoid browser UI issues */
   height: 100vh;
 }
 @supports (height: 100dvh){
@@ -115,7 +114,7 @@
   min-height: 0; /* allow child to shrink correctly */
 }
 
-/* The image fits within the dynamic viewport, never cropped */
+/* The image fits within the dynamic viewport, never cropped (desktop/default) */
 .gc-lb-image{
   display:block;
   width:auto; height:auto;
@@ -164,19 +163,48 @@
   .gc-next { right: -20px; }
   .gc-lb-nav{ width:44px; height:44px; }
 }
+
+/* ==== MOBILE-ONLY: full-width image, no side padding, perfect fit ==== */
 @media (max-width: 639.98px){
-  /* Keep carousel arrows still half out on phones */
+  /* keep carousel arrows half-out on phones (unchanged) */
   .gc-arrow { width: 38px; height: 38px; }
   .gc-prev { left: -19px; }
   .gc-next { right: -19px; }
 
-  /* Lightbox: tighter padding so the image gets more room */
-  :root{
-    --gc-lb-pad-x: clamp(10px, 4vw, 18px);
-    --gc-lb-pad-y: clamp(6px, 3vh, 14px);
+  /* lightbox: remove side padding so image can be 100% viewport width */
+  .gc-lb-stage{
+    padding: 10px 0;                /* no left/right padding */
   }
-  .gc-lb-topbar{ padding-top: 10px; padding-bottom: 6px; }
-  .gc-lb-stage{ padding: var(--gc-lb-pad-y) calc(var(--gc-lb-pad-x) + 44px); }
-  .gc-lb-nav{ width:42px; height:42px; }
-  .gc-lb-image{ border-radius: 14px; }
+
+  /* make the image truly full-width and fully visible */
+  .gc-lb-image{
+    width: 100vw;
+    max-width: 100vw;
+    height: auto;
+    /*  topbar (~56px) + caption (~56px) + stage vertical padding (2*10) */
+    max-height: calc(100dvh - 56px - 56px - 20px);
+    object-fit: contain;
+    border-radius: 0;               /* avoid clipping on tiny screens */
+    margin: 0;
+  }
+  @supports not (height: 100dvh){
+    .gc-lb-image{
+      max-height: calc(100vh - 56px - 56px - 20px);
+    }
+  }
+
+  /* compact UI but keep content edge-to-edge for the image */
+  .gc-lb-topbar{
+    padding: 10px 10px 6px 10px;
+  }
+  .gc-lb-caption{
+    padding: 8px 10px 12px 10px;
+    font-size: .95rem;
+    line-height: 1.35;
+  }
+
+  /* arrows float above image without stealing width */
+  .gc-lb-nav{ width: 42px; height: 42px; }
+  .gc-lb-prev{ left: 8px; }
+  .gc-lb-next{ right: 8px; }
 }
